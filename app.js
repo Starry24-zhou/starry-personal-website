@@ -137,6 +137,45 @@ menuLinks.forEach(link => {
 // 注册 GSAP 插件
 gsap.registerPlugin(ScrollTrigger);
 
+// 开场动效：参考 Landon Norris 的首屏氛围，替换为个人IP形象
+const openingScene = document.getElementById('openingScene');
+const openingIp = document.getElementById('ipCharacter');
+
+// 这里可替换成你的真实Q版IP图 URL
+const IP_CHARACTER_SRC = openingIp?.getAttribute('src') || '';
+if (openingIp && IP_CHARACTER_SRC) {
+    openingIp.src = IP_CHARACTER_SRC;
+}
+
+function runOpeningScene() {
+    if (!openingScene) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+        openingScene.style.display = 'none';
+        return;
+    }
+
+    const tl = gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        onComplete: () => {
+            openingScene.style.display = 'none';
+            ScrollTrigger.refresh();
+        }
+    });
+
+    tl.fromTo('.opening-ip', { scale: 0.72, opacity: 0, y: 80 }, { scale: 1, opacity: 1, y: 0, duration: 1.1 })
+      .fromTo('.opening-slogan', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.5')
+      .fromTo('.shard-left', { x: -160, y: 90, opacity: 0, rotate: -42 }, { x: 0, y: 0, opacity: 0.9, rotate: -18, duration: 0.85 }, '-=0.6')
+      .fromTo('.shard-right', { x: 150, y: 90, opacity: 0, rotate: 40 }, { x: 0, y: 0, opacity: 0.9, rotate: 17, duration: 0.85 }, '-=0.82')
+      .to('.opening-ip', { scale: 1.06, duration: 0.4, ease: 'power2.inOut' }, '+=0.25')
+      .to('.opening-shard', { x: (i) => (i === 0 ? -220 : 220), y: -40, opacity: 0, duration: 0.45 }, '-=0.22')
+      .to('.opening-center', { scale: 0.92, opacity: 0, y: -30, duration: 0.55 }, '-=0.32')
+      .to('.opening-scene', { opacity: 0, duration: 0.38, ease: 'power2.in' }, '-=0.2');
+}
+
+runOpeningScene();
+
 // 2. 背景拓扑纹理轻微视差滚动 (L3 级特效)
 gsap.to(".topo-bg", {
     yPercent: 15,
