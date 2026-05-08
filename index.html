@@ -37,10 +37,10 @@
         <div class="menu-container">
             <ul class="menu-links">
                 <li><a href="#home" class="menu-link" data-i18n="navHome">首页 / HOME</a></li>
-                <li><a href="#about" class="menu-link" data-i18n="navAbout">系统设定 / SYSTEM.PROMPT</a></li>
-                <li><a href="#projects" class="menu-link" data-i18n="navProjects">训练日志 / TRAINING.LOGS</a></li>
-                <li><a href="#hobbies" class="menu-link" data-i18n="navHobbies">离线状态 / OFFLINE.STATE</a></li>
-                <li><a href="#contact" class="menu-link" data-i18n="navContact">建立连接 / INITIATE.HANDSHAKE</a></li>
+                <li><a href="#ai-portfolio" class="menu-link" data-i18n="navPortfolio">AI作品集 / AI PORTFOLIO</a></li>
+                <li><a href="#f1-hobbies" class="menu-link" data-i18n="navF1">个人爱好 / F1 HOBBIES</a></li>
+                <li><a href="#render-gallery" class="menu-link" data-i18n="navRender">渲染集 / RENDER GALLERY</a></li>
+                <li><a href="#resume" class="menu-link" data-i18n="navResume">个人简历 / RESUME</a></li>
             </ul>
         </div>
     </div>
@@ -66,9 +66,9 @@
         </section>
 
         <!-- About 个人介绍 -->
-        <section class="about" id="about">
+        <section class="about" id="ai-portfolio">
             <div class="container narrow">
-                <h2 class="section-title reveal-up" data-i18n="aboutTitle">SYSTEM.<span class="text-accent">PROMPT</span></h2>
+                <h2 class="section-title reveal-up" data-i18n="portfolioTitle">AI.<span class="text-accent">PORTFOLIO</span></h2>
                 <div class="terminal-window reveal-up">
                     <div class="terminal-header">
                         <span class="dot"></span>
@@ -76,51 +76,51 @@
                         <span class="dot"></span>
                     </div>
                     <div class="terminal-body">
-                        <p><span class="text-tertiary">></span> <span data-i18n="aboutLine1">INITIALIZING PROFILE...</span></p>
-                        <p><span class="text-tertiary">></span> <span data-i18n="aboutLine2">ROLE: AI TRAINER & PROMPT ENGINEER</span></p>
-                        <p><span class="text-tertiary">></span> <span data-i18n="aboutLine3">EXPERTISE: LLM FINE-TUNING, RAG ARCHITECTURE, WORKFLOW AUTOMATION.</span></p>
-                        <p><span class="text-tertiary">></span> <span data-i18n="aboutLine4">MISSION: TEACHING MACHINES TO REASON, CREATE, AND UNDERSTAND.</span></p>
-                        <p><span class="text-tertiary">></span> <span data-i18n="aboutLine5">STATUS: READY FOR NEW CHALLENGES</span> <span class="cursor-blink text-accent">_</span></p>
+                        <p><span class="text-tertiary">></span> <span data-i18n="portfolioLine1">LOADING AI WORK COLLECTION...</span></p>
+                        <p><span class="text-tertiary">></span> <span data-i18n="portfolioLine2">MODULE: LLM FINE-TUNING CASES</span></p>
+                        <p><span class="text-tertiary">></span> <span data-i18n="portfolioLine3">MODULE: AGENT WORKFLOW SOLUTIONS</span></p>
+                        <p><span class="text-tertiary">></span> <span data-i18n="portfolioLine4">MODULE: PROMPT DESIGN EXPERIMENTS</span></p>
+                        <p><span class="text-tertiary">></span> <span data-i18n="portfolioLine5">STATUS: READY FOR REVIEW</span> <span class="cursor-blink text-accent">_</span></p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Projects AI 作品区 (Bento Box 布局) -->
-        <section class="projects" id="projects">
+        <section class="projects" id="f1-hobbies">
             <div class="container">
-                <h2 class="section-title reveal-up" data-i18n="projectsTitle">TRAINING.<span class="text-accent">LOGS</span></h2>
+                <h2 class="section-title reveal-up" data-i18n="f1Title">F1.<span class="text-accent">HOBBIES</span></h2>
                 <div class="grid-bento">
                     <!-- 跨列大卡片 -->
                     <a href="#" class="card bento-large reveal-up">
                         <div class="card-content">
                             <span class="badge">LLM Fine-tuning</span>
-                            <h3 data-i18n="project1Title">Project Alpha: Support AI</h3>
-                            <p data-i18n="project1Desc">基于 Llama-3 训练的领域专精模型，拥有 95% 的意图识别准确率，处理了超过 10 万条客服工单记录。</p>
+                            <h3 data-i18n="f1Card1Title">Race Weekend Notes</h3>
+                            <p data-i18n="f1Card1Desc">记录每一站 F1 比赛的策略变化、轮胎选择与车手表现，形成个人观赛数据库。</p>
                         </div>
                     </a>
                     <!-- 标准卡片 -->
                     <a href="#" class="card reveal-up" style="transition-delay: 0.1s;">
                         <div class="card-content">
                             <span class="badge">Agent Workflow</span>
-                            <h3 data-i18n="project2Title">Auto-Coder</h3>
-                            <p data-i18n="project2Desc">构建的多智能体协作系统，实现从 PRD 解析到前后端样板代码的自动生成。</p>
+                            <h3 data-i18n="f1Card2Title">Circuit Analysis</h3>
+                            <p data-i18n="f1Card2Desc">对银石、铃鹿、摩纳哥等赛道进行弯角拆解和速度曲线分析。</p>
                         </div>
                     </a>
                     <!-- 标准卡片 -->
                     <a href="#" class="card reveal-up" style="transition-delay: 0.2s;">
                         <div class="card-content">
                             <span class="badge">Prompt Eng</span>
-                            <h3 data-i18n="project3Title">Creative Writer</h3>
-                            <p data-i18n="project3Desc">设计了复杂的 Prompt Chain，引导模型生成高质量、符合逻辑的科幻小说章节。</p>
+                            <h3 data-i18n="f1Card3Title">Driver Tracker</h3>
+                            <p data-i18n="f1Card3Desc">持续追踪车手赛季积分、排位稳定性与比赛节奏。</p>
                         </div>
                     </a>
                     <!-- 宽卡片 -->
                     <a href="#" class="card bento-wide reveal-up">
                         <div class="card-content">
                             <span class="badge">RAG System</span>
-                            <h3 data-i18n="project4Title">Enterprise Knowledge Base</h3>
-                            <p data-i18n="project4Desc">为 10,000+ 份企业内部文档部署检索增强生成（RAG）系统，将信息检索与整合时间降低了 80%。</p>
+                            <h3 data-i18n="f1Card4Title">Team Strategy Archive</h3>
+                            <p data-i18n="f1Card4Desc">整理各车队在进站窗口、安全车阶段与长距离策略中的决策模式。</p>
                         </div>
                     </a>
                 </div>
@@ -128,30 +128,30 @@
         </section>
 
         <!-- Hobbies 爱好区 (横向滚动带) -->
-        <section class="hobbies" id="hobbies">
-            <h2 class="sr-only" data-i18n="hobbiesTitle">OFFLINE.STATE</h2>
+        <section class="hobbies" id="render-gallery">
+            <h2 class="sr-only" data-i18n="renderTitle">RENDER.GALLERY</h2>
             <div class="hobbies-marquee">
                 <div class="marquee-content">
-                    <span>CYBERPUNK</span><span class="separator">/</span>
-                    <span>MECHANICAL KEYBOARDS</span><span class="separator">/</span>
-                    <span>GENERATIVE ART</span><span class="separator">/</span>
-                    <span>ESPORTS</span><span class="separator">/</span>
+                    <span>RENDER SET</span><span class="separator">/</span>
+                    <span>3D LIGHTING</span><span class="separator">/</span>
+                    <span>MATERIAL STUDIES</span><span class="separator">/</span>
+                    <span>VISUAL FRAMES</span><span class="separator">/</span>
                     <!-- 复制内容实现无缝循环 -->
-                    <span>CYBERPUNK</span><span class="separator">/</span>
-                    <span>MECHANICAL KEYBOARDS</span><span class="separator">/</span>
-                    <span>GENERATIVE ART</span><span class="separator">/</span>
-                    <span>ESPORTS</span><span class="separator">/</span>
+                    <span>RENDER SET</span><span class="separator">/</span>
+                    <span>3D LIGHTING</span><span class="separator">/</span>
+                    <span>MATERIAL STUDIES</span><span class="separator">/</span>
+                    <span>VISUAL FRAMES</span><span class="separator">/</span>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Footer 简历/联系方式 -->
-    <footer class="footer" id="contact">
+    <footer class="footer" id="resume">
         <div class="container">
-            <h2 class="section-title text-inverse" data-i18n="footerTitle">INITIATE.<span class="text-accent">HANDSHAKE</span></h2>
-            <p class="footer-desc" data-i18n="footerDesc">Looking for an AI Trainer to elevate your intelligent systems?</p>
-            <a href="mailto:hello@example.com" class="btn-primary btn-large" data-i18n="footerBtn">PING ME_</a>
+            <h2 class="section-title text-inverse" data-i18n="resumeTitle">PERSONAL.<span class="text-accent">RESUME</span></h2>
+            <p class="footer-desc" data-i18n="resumeDesc">AI训练师 / Prompt工程师，欢迎下载简历或联系合作。</p>
+            <a href="mailto:hello@example.com" class="btn-primary btn-large" data-i18n="resumeBtn">VIEW RESUME_</a>
         </div>
     </footer>
 
