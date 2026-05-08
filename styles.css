@@ -1,0 +1,609 @@
+/*
+ * Tech-Avant-Garde CSS / AI Trainer Portfolio
+ * 遵循 DESIGN.md 规范：不包含硬编码色值，使用预设变量，动效顺滑，不使用圆润倒角。
+ */
+
+ :root {
+    /* Backgrounds */
+    --bg: #FFFFFF;
+    --surface: #F4F4F5;
+    --surface-alt: #111111;
+    --surface-hover: #E5E5E5;
+  
+    /* Borders */
+    --border: #E5E5E5;
+    --border-dark: #333333;
+    --border-hover: #000000;
+  
+    /* Text */
+    --text: #0A0A0A;
+    --text-secondary: #555555;
+    --text-tertiary: #888888;
+    --text-inverse: #FFFFFF;
+  
+    /* Accent */
+    --accent: #DFFF00;
+    --accent-hover: #CBE600;
+    
+    /* Semantic */
+    --success: #00E676;
+    --error: #FF3B30;
+    --warning: #FFAB00;
+  
+    /* Fonts */
+    --font-heading: 'Oswald', 'Noto Sans SC', sans-serif;
+    --font-body: 'Inter', 'Noto Sans SC', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  
+  /* Reset & Base */
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
+  
+  html {
+      scroll-behavior: initial; /* Lenis 将接管滚动 */
+  }
+  
+  body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* 微弱的 SVG 拓扑背景层 */
+  .topo-bg {
+      position: fixed;
+      top: -20%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      /* 使用 data URI 插入 SVG 拓扑纹理，颜色为 #000000，透明度通过 fill-opacity=0.03 实现 */
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+      z-index: -1;
+      pointer-events: none;
+      /* 通过 GSAP 视差滚动改变背景偏移量 */
+  }
+  
+  /* Layout Containers */
+  .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 2rem;
+  }
+  .container.narrow {
+      max-width: 800px;
+  }
+  
+  /* Typography Utilities */
+  h1, h2, h3, .logo {
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+  }
+  
+  .text-accent {
+      color: var(--accent);
+      /* 增强在白色背景上的对比度 */
+      -webkit-text-stroke: 1px var(--text);
+  }
+  
+  .text-inverse { color: var(--text-inverse); }
+  .text-secondary { color: var(--text-secondary); }
+  .text-tertiary { color: var(--text-tertiary); }
+  .sr-only { display: none; }
+  
+  .section-title {
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 3rem;
+  }
+  
+  /* Component: Button */
+  .btn-primary {
+      background-color: var(--accent);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+      border: 2px solid var(--text);
+      border-radius: 4px; /* 最大不超过 8px，保持硬朗 */
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      text-transform: uppercase;
+  }
+  
+  .btn-primary.btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+  }
+  
+  .btn-primary.btn-large {
+      padding: 1.5rem 3rem;
+      font-size: 1.5rem;
+      font-family: var(--font-heading);
+  }
+  
+  .btn-primary:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: 4px 4px 0px var(--text); /* 新粗野主义风格的硬阴影 */
+      background-color: var(--accent-hover);
+  }
+  
+  .btn-primary:active {
+      transform: translate(0px, 0px);
+      box-shadow: 0px 0px 0px var(--text);
+  }
+  
+  .btn-primary:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 4px;
+  }
+  
+  /* Navigation */
+.navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    background: transparent;
+}
+.navbar .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    mix-blend-mode: difference;
+    color: var(--bg);
+}
+
+.nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-icon {
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+.btn-icon-square {
+    width: 44px;
+    height: 44px;
+    background-color: var(--text);
+    color: var(--text-inverse);
+    border: 2px solid var(--text);
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+    z-index: 1001; /* 确保在全屏菜单之上 */
+}
+
+.btn-icon-square:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 2px 2px 0px var(--text);
+    background-color: var(--accent);
+    color: var(--text);
+}
+
+/* 汉堡菜单 SVG 动画样式 */
+.menu-line-1, .menu-line-2 {
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), y 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-open .menu-line-1 {
+    transform: translateY(4px) rotate(45deg);
+}
+
+.menu-open .menu-line-2 {
+    transform: translateY(-4px) rotate(-45deg);
+}
+
+/* --- Full Screen Menu --- */
+.full-menu {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--bg);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.full-menu.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* 当菜单打开时，稍微改变一下背景图案的透明度 */
+.full-menu.active::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+    z-index: -1;
+}
+
+.menu-links {
+    list-style: none;
+    text-align: center;
+}
+
+.menu-links li {
+    margin: 1.5rem 0;
+    overflow: hidden; /* For animation */
+}
+
+.menu-link {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 5rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+    transform: translateY(100%); /* Initial state for animation */
+    opacity: 0;
+}
+
+.full-menu.active .menu-link {
+    transform: translateY(0);
+    opacity: 1;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+}
+
+/* Stagger the animation */
+.full-menu.active li:nth-child(1) .menu-link { transition-delay: 0.1s; }
+.full-menu.active li:nth-child(2) .menu-link { transition-delay: 0.15s; }
+.full-menu.active li:nth-child(3) .menu-link { transition-delay: 0.2s; }
+.full-menu.active li:nth-child(4) .menu-link { transition-delay: 0.25s; }
+.full-menu.active li:nth-child(5) .menu-link { transition-delay: 0.3s; }
+
+.menu-link:hover {
+    color: var(--accent);
+    -webkit-text-stroke: 1px var(--text);
+}
+  
+  /* Sections Setup */
+  section {
+      padding: 8rem 0;
+  }
+  
+  /* --- Hero Section --- */
+  .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 6rem;
+  }
+  
+  .hero .container {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 4rem;
+      align-items: center;
+  }
+  
+  .hero-content h1 {
+      font-size: clamp(4rem, 8vw, 8rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+  }
+  
+  /* Mask Reveal Setup (用于 GSAP 操作) */
+  .reveal-text span {
+      display: inline-block;
+      clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
+      transform: translateY(20px);
+  }
+  
+  .hero-desc {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 500px;
+  }
+  
+  .hero-image {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid var(--text);
+      aspect-ratio: 4/5;
+  }
+  
+  .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* 增加极客感的黑白滤镜，悬停恢复 */
+      filter: grayscale(100%) contrast(1.2);
+      transition: filter 0.5s ease, transform 0.5s ease;
+  }
+  
+  .hero-image:hover img {
+      filter: grayscale(0%) contrast(1.1);
+      transform: scale(1.05);
+  }
+  
+  /* --- About / Terminal Window --- */
+  .terminal-window {
+      background-color: var(--surface-alt);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-dark);
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
+  }
+  
+  .terminal-header {
+      background-color: #222222;
+      padding: 0.75rem 1rem;
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-dark);
+  }
+  
+  .terminal-header .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background-color: var(--text-secondary);
+  }
+  .terminal-header .dot:nth-child(1) { background-color: var(--error); }
+  .terminal-header .dot:nth-child(2) { background-color: var(--warning); }
+  .terminal-header .dot:nth-child(3) { background-color: var(--success); }
+  
+  .terminal-body {
+      padding: 2rem;
+      font-size: 1rem;
+      line-height: 1.8;
+  }
+  
+  .terminal-body p { margin-bottom: 0.5rem; }
+  .cursor-blink { animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  
+  /* --- Projects Bento Grid --- */
+  .grid-bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+      grid-auto-rows: minmax(280px, auto);
+  }
+  
+  /* Component: Card */
+  .card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      grid-column: span 4; /* Default to 4 columns */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      text-decoration: none;
+      color: var(--text);
+  }
+  
+  /* Bento sizes */
+  .card.bento-large { grid-column: span 8; grid-row: span 2; justify-content: flex-end; }
+  .card.bento-wide { grid-column: span 8; }
+  
+  /* Hover interactions */
+  .card:hover {
+      border-color: var(--text);
+      transform: translateY(-4px);
+  }
+  
+  .card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+  }
+  
+  /* Spotlight Mouse Effect Layer */
+  .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      /* 鼠标位置从 JS --mouse-x/y 传入，使用荧光色 */
+      background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(223, 255, 0, 0.15) 0%, transparent 40%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 1;
+  }
+  .card:hover::before { opacity: 1; }
+  
+  .card-content {
+      position: relative;
+      z-index: 2; /* 确保文字在聚光灯之上 */
+  }
+  
+  .card h3 {
+      font-size: 1.75rem;
+      margin: 1rem 0 0.5rem;
+      letter-spacing: -0.01em;
+  }
+  
+  .card p {
+      color: var(--text-secondary);
+  }
+  
+  /* Component: Badge */
+  .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background-color: var(--text);
+      color: var(--text-inverse);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      align-self: flex-start;
+      margin-bottom: auto;
+  }
+  
+  /* --- Hobbies Marquee --- */
+  .hobbies {
+      overflow: hidden;
+      padding: 4rem 0;
+      border-top: 2px solid var(--text);
+      border-bottom: 2px solid var(--text);
+      background-color: var(--accent); /* 使用大面积荧光色做强烈对比 */
+  }
+  
+  .hobbies-marquee {
+      white-space: nowrap;
+      display: flex;
+  }
+  
+  .marquee-content {
+      display: inline-block;
+      animation: marquee 20s linear infinite;
+  }
+  
+  .marquee-content span {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 6vw, 6rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0 2rem;
+      color: var(--text);
+  }
+  
+  .marquee-content .separator {
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.2);
+  }
+  
+  @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+  }
+  
+  /* --- Footer --- */
+  .footer {
+      background-color: var(--surface-alt);
+      color: var(--text-inverse);
+      padding: 10rem 0 6rem;
+      text-align: center;
+  }
+  
+  .footer .section-title {
+      margin-bottom: 1.5rem;
+  }
+  
+  .footer .footer-desc {
+      color: var(--text-tertiary);
+      font-size: 1.25rem;
+      margin-bottom: 4rem;
+  }
+  
+  .footer .btn-primary {
+      /* 反色背景下的按钮需保证可见度 */
+      border-color: var(--text-inverse);
+      box-shadow: 4px 4px 0px var(--text-inverse);
+  }
+  .footer .btn-primary:hover {
+      background-color: var(--accent-hover);
+      box-shadow: 6px 6px 0px var(--text-inverse);
+      transform: translate(-2px, -2px);
+  }
+  
+  /* --- Global Reveal Classes --- */
+  .reveal-up {
+      opacity: 0;
+      transform: translateY(40px);
+  }
+  
+  /* --- Media Queries (响应式) --- */
+  @media (max-width: 1024px) {
+      .hero .container {
+          grid-template-columns: 1fr;
+          text-align: center;
+      }
+      .hero-image {
+          aspect-ratio: 16/9;
+          margin-top: 2rem;
+      }
+      .grid-bento {
+          grid-template-columns: repeat(8, 1fr);
+      }
+      .card {
+          grid-column: span 4;
+      }
+      .card.bento-large, .card.bento-wide {
+          grid-column: span 8;
+      }
+  }
+  
+  @media (max-width: 768px) {
+      section {
+          padding: 4rem 0;
+      }
+      .grid-bento {
+          grid-template-columns: 1fr; /* 单栏流式布局 */
+      }
+      .card {
+          grid-column: span 1 !important;
+          grid-row: span 1 !important;
+      }
+      /* 移动端减弱或移除 Hover 效果，适应触控 */
+      .card::before {
+          display: none;
+      }
+      .btn-primary:hover {
+          transform: none;
+          box-shadow: none;
+      }
+      .btn-primary {
+          min-width: 44px;
+          min-height: 44px; /* Touch target size */
+      }
+  }
+  
+  /* --- Reduced Motion Fallback --- */
+  @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+      }
+      .reveal-up {
+          opacity: 1;
+          transform: none;
+      }
+      .reveal-text span {
+          clip-path: none;
+          transform: none;
+      }
+  }
