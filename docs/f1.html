@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>个人爱好（F1） | Starry</title>
+    <meta
+      name="description"
+      content="Starry 的 F1 个人爱好模块，记录比赛策略、轮胎窗口、赛道拆解、车手状态与观赛数据库。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #000000;
+        --surface: #101010;
+        --surface-2: #181818;
+        --line: rgba(255, 255, 255, 0.08);
+        --text: #e1e0cc;
+        --muted: rgba(225, 224, 204, 0.68);
+        --primary: #dedbc8;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background: var(--bg);
+        color: var(--text);
+        background-image:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 30%),
+          radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.03), transparent 26%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 72px;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .brand {
+        font-size: 0.9rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--primary);
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        text-decoration: none;
+        color: var(--muted);
+        transition: transform 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+      }
+
+      .back-link:hover {
+        color: var(--text);
+        border-color: rgba(255, 255, 255, 0.18);
+        transform: translateY(-2px);
+      }
+
+      .hero {
+        border: 1px solid var(--line);
+        border-radius: 32px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+        padding: 32px;
+      }
+
+      .eyebrow {
+        margin: 0;
+        font-size: 0.72rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: rgba(222, 219, 200, 0.68);
+      }
+
+      .hero-title {
+        margin: 18px 0 0;
+        font-size: clamp(3rem, 8vw, 7rem);
+        line-height: 0.92;
+        letter-spacing: -0.06em;
+      }
+
+      .hero-title em {
+        font-family: 'Instrument Serif', serif;
+        font-style: italic;
+        font-weight: 400;
+        color: rgba(225, 224, 204, 0.64);
+      }
+
+      .hero-copy {
+        max-width: 760px;
+        margin: 24px 0 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+
+      .section {
+        margin-top: 22px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: var(--surface);
+        padding: 28px;
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        line-height: 1;
+      }
+
+      .section-desc {
+        margin: 14px 0 0;
+        max-width: 780px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 28px;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--surface-2);
+        padding: 22px;
+      }
+
+      .card-index {
+        font-size: 0.74rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(222, 219, 200, 0.56);
+      }
+
+      .card h3 {
+        margin: 18px 0 0;
+        font-size: 1.5rem;
+        line-height: 1.2;
+      }
+
+      .card p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .tag-list,
+      .bullet-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--primary);
+        font-size: 0.82rem;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 22px;
+      }
+
+      .flow-step {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 18px;
+      }
+
+      .flow-step strong {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 0.76rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(222, 219, 200, 0.56);
+      }
+
+      .flow-step span {
+        color: var(--text);
+        line-height: 1.7;
+      }
+
+      @media (max-width: 960px) {
+        .grid,
+        .flow {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page {
+          width: min(100% - 20px, 1200px);
+          padding-top: 16px;
+        }
+
+        .hero,
+        .section {
+          padding: 20px;
+          border-radius: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="nav">
+        <div class="brand">F1 MODULE</div>
+        <a class="back-link" href="./">返回首页</a>
+      </div>
+
+      <section class="hero">
+        <p class="eyebrow">PERSONAL HOBBY / F1</p>
+        <h1 class="hero-title">比赛策略 <em>与轮胎窗口</em></h1>
+        <p class="hero-copy">
+          这里是 Starry 的个人爱好模块独立页面。核心方向是把每站比赛的练习赛、排位赛与正赛信息整理成统一结构，持续记录轮胎窗口、进站节点、安全车干扰和自己的策略判断，逐步沉淀成个人 F1 观赛数据库。
+        </p>
+      </section>
+
+      <section class="section">
+        <p class="eyebrow">WEEKEND OVERVIEW</p>
+        <h2 class="section-title">比赛周末总览</h2>
+        <p class="section-desc">
+          这部分先作为每一站比赛的标准记录模板。你后面可以用同一套结构去写巴林、银石、铃鹿、蒙扎等任意分站的观察与复盘。
+        </p>
+
+        <div class="tag-list">
+          <span class="tag">天气 / 风向</span>
+          <span class="tag">赛道路面演化</span>
+          <span class="tag">轮胎配方与窗口</span>
+          <span class="tag">长距离 pace</span>
+          <span class="tag">排位赛出场时机</span>
+          <span class="tag">安全车干扰</span>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-index">01 / FRIDAY</div>
+            <h3>练习赛观察</h3>
+            <p>记录赛道路面演化、车队基础调校方向、长短程节奏与轮胎热衰减信号。</p>
+            <div class="bullet-list">
+              <span class="tag">赛道抓地力变化</span>
+              <span class="tag">长短程配速</span>
+              <span class="tag">不同配方工作区间</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-index">02 / SATURDAY</div>
+            <h3>排位赛判断</h3>
+            <p>观察单圈爆发力、出场时机、赛道温度与红黄旗风险，判断排位对正赛策略的牵引。</p>
+            <div class="bullet-list">
+              <span class="tag">排位圈窗口</span>
+              <span class="tag">流量与出场顺序</span>
+              <span class="tag">红旗 / 黄旗扰动</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-index">03 / SUNDAY</div>
+            <h3>正赛策略总览</h3>
+            <p>聚焦起跑轮胎、首停节奏、SC / VSC 节点与车队是否执行 Plan B、Plan C。</p>
+            <div class="bullet-list">
+              <span class="tag">起跑轮胎与首停</span>
+              <span class="tag">SC / VSC 节点</span>
+              <span class="tag">Plan B / Plan C 切换</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <p class="eyebrow">SAMPLE FLOW</p>
+        <h2 class="section-title">一站比赛怎么记</h2>
+        <p class="section-desc">
+          你可以先用下面这条流程做首版模板，后面再往里加具体车队、车手、分站和轮胎数据。
+        </p>
+
+        <div class="flow">
+          <article class="flow-step">
+            <strong>STEP 01</strong>
+            <span>赛前记录天气、轮胎配方、赛道条件和车队升级点。</span>
+          </article>
+          <article class="flow-step">
+            <strong>STEP 02</strong>
+            <span>周五练习赛观察长短程表现，先形成轮胎窗口判断。</span>
+          </article>
+          <article class="flow-step">
+            <strong>STEP 03</strong>
+            <span>周六结合排位结果，更新正赛起跑轮胎与进站预判。</span>
+          </article>
+          <article class="flow-step">
+            <strong>STEP 04</strong>
+            <span>周日赛后复盘真实策略与自己的判断偏差，形成结论。</span>
+          </article>
+        </div>
+      </section>
+    </div>
+  </body>
+  </html>
