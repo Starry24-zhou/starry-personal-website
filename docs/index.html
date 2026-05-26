@@ -7,6 +7,14 @@
       name="description"
       content="Starry 的 AI 训练师个人网站，展示 AI 作品、F1 爱好、渲染集与个人简历。"
     />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Starry | AI训练师个人网站" />
+    <meta property="og:description" content="Starry 的 AI 训练师个人网站，展示 AI 作品、F1 爱好、渲染集与个人简历。" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Starry | AI训练师个人网站" />
+    <meta name="twitter:description" content="Starry 的 AI 训练师个人网站，展示 AI 作品、F1 爱好、渲染集与个人简历。" />
+    <link rel="icon" type="image/svg+xml" href="/starry-personal-website/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,9 +22,25 @@
       rel="stylesheet"
     />
     <title>Starry | AI训练师个人网站</title>
-    <script type="module" crossorigin src="/starry-personal-website/assets/index-CMOEFlIP.js"></script>
-    <link rel="stylesheet" crossorigin href="/starry-personal-website/assets/index-Dht50JLb.css">
-    <link rel="stylesheet" href="/starry-personal-website/styles.css">
+    <style>
+      #dify-chatbot-bubble-button {
+        background-color: #1C64F2 !important;
+        position: fixed !important;
+        bottom: 2rem !important;
+        right: 2rem !important;
+        z-index: 9999 !important;
+      }
+      #dify-chatbot-bubble-window {
+        width: 24rem !important;
+        height: 40rem !important;
+        position: fixed !important;
+        bottom: 5rem !important;
+        right: 2rem !important;
+        z-index: 9998 !important;
+      }
+    </style>
+    <script type="module" crossorigin src="/starry-personal-website/assets/index-DRIDX_TM.js"></script>
+    <link rel="stylesheet" crossorigin href="/starry-personal-website/assets/index-CbJ1UIkK.css">
   </head>
   <body>
     <div id="root"></div>
@@ -55,6 +79,30 @@
     function init(){if(!tryInsert()){var o=new MutationObserver(function(){if(tryInsert())o.disconnect()});o.observe(document.body,{childList:true,subtree:true});setTimeout(function(){o.disconnect()},30000);}}
     if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
     })();
+    </script>
+    <script>
+      window.difyChatbotConfig = {
+        token: 'Ys2UTbXdzNpzaC6e',
+        inputs: {
+          // You can define the inputs from the Start node here
+          // key is the variable name
+          // e.g.
+          // name: "NAME"
+        },
+        systemVariables: {
+          // user_id: 'YOU CAN DEFINE USER ID HERE',
+          // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+        },
+        userVariables: {
+          // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+          // name: 'YOU CAN DEFINE USER NAME HERE',
+        },
+      }
+    </script>
+    <script
+      src="https://udify.app/embed.min.js"
+      id="Ys2UTbXdzNpzaC6e"
+      defer>
     </script>
   </body>
 </html>
