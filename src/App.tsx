@@ -1,6 +1,6 @@
 import { motion, useInView, useScroll, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Check, X } from 'lucide-react';
-import { type ReactNode, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatedLetter } from './components/AnimatedLetter';
 import { WordsPullUp, WordsPullUpMultiStyle } from './components/WordsPullUp';
 
@@ -141,6 +141,17 @@ function TextCard({
   href,
   videoSrc,
 }: (typeof features)[number] & { videoSrc?: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.play().catch(() => {});
+    const tryPlay = () => v.play().catch(() => {});
+    window.addEventListener('touchstart', tryPlay, { once: true });
+    return () => window.removeEventListener('touchstart', tryPlay);
+  }, []);
+
   const scrollToTarget = () => {
     if (!href.startsWith('#')) return;
     const target = document.querySelector(href);
@@ -167,11 +178,13 @@ function TextCard({
     >
       {videoSrc && (
         <video
+          ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
           src={videoSrc}
         />
       )}
@@ -209,6 +222,20 @@ function TextCard({
 export default function App() {
   const [wechatOpen, setWechatOpen] = useState(false);
   const aboutRef = useRef<HTMLElement | null>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const featureVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const tryPlay = (v: HTMLVideoElement | null) => { if (v) v.play().catch(() => {}); };
+    tryPlay(heroVideoRef.current);
+    tryPlay(featureVideoRef.current);
+    const onTouch = () => {
+      tryPlay(heroVideoRef.current);
+      tryPlay(featureVideoRef.current);
+    };
+    window.addEventListener('touchstart', onTouch, { once: true });
+    return () => window.removeEventListener('touchstart', onTouch);
+  }, []);
   const { scrollYProgress } = useScroll({ target: aboutRef, offset: ['start 0.8', 'end 0.2'] });
   const aboutText = useMemo(
     () =>
@@ -223,6 +250,7 @@ export default function App() {
       <section id="home" className="h-screen bg-black p-4 md:p-6">
         <div className="relative h-full overflow-hidden rounded-2xl bg-gradient-to-br from-neutral-900 via-black to-neutral-800 md:rounded-[2rem]">
           <video
+            ref={heroVideoRef}
             className="absolute inset-0 h-full w-full object-cover"
             autoPlay
             loop
@@ -346,10 +374,12 @@ export default function App() {
               >
                 <video
                   className="absolute inset-0 h-full w-full object-cover"
+                  ref={featureVideoRef}
                   autoPlay
                   loop
                   muted
                   playsInline
+                  preload="auto"
                   src={featureVideo}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-80" />
