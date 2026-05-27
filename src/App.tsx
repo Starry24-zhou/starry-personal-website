@@ -278,6 +278,8 @@ export default function App() {
             muted
             playsInline
             preload="auto"
+            // @ts-ignore
+            fetchpriority="high"
             src={heroVideo}
           />
           <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.7] mix-blend-overlay" />

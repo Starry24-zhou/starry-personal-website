@@ -595,19 +595,19 @@
       /* ════════════════════════════════════════
          HELPERS
       ════════════════════════════════════════ */
-      const FAV = d => `https://www.google.com/s2/favicons?domain=${d}&sz=64`;
+      const FAV = d => `https://icons.duckduckgo.com/ip3/${d}.ico`;
 
       function iconHtml(fav, fallback) {
         return `
           <img src="${FAV(fav)}" alt="" loading="lazy"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            onerror="if(this.src.includes('duckduckgo')){this.src='https://${fav}/favicon.ico'}else{this.style.display='none';this.nextElementSibling.style.display='flex'}">
           <div class="tool-icon-fb">${fallback[0]}</div>`;
       }
 
       function rankIconHtml(fav, fallback) {
         return `
           <img src="${FAV(fav)}" alt="" loading="lazy"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            onerror="if(this.src.includes('duckduckgo')){this.src='https://${fav}/favicon.ico'}else{this.style.display='none';this.nextElementSibling.style.display='flex'}">
           <div class="rank-logo-fb">${fallback[0]}</div>`;
       }
 
