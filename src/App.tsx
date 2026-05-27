@@ -146,10 +146,16 @@ function TextCard({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.play().catch(() => {});
-    const tryPlay = () => v.play().catch(() => {});
-    window.addEventListener('touchstart', tryPlay, { once: true });
-    return () => window.removeEventListener('touchstart', tryPlay);
+    v.muted = true;
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
+    const tryPlay = () => { v.play().catch(() => {}); };
+    v.addEventListener('canplay', tryPlay, { once: true });
+    v.load();
+    tryPlay();
+    const events = ['touchstart', 'touchend', 'click'] as const;
+    events.forEach(e => window.addEventListener(e, tryPlay, { once: true, passive: true }));
+    return () => events.forEach(e => window.removeEventListener(e, tryPlay));
   }, []);
 
   const scrollToTarget = () => {
@@ -226,15 +232,30 @@ export default function App() {
   const featureVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const tryPlay = (v: HTMLVideoElement | null) => { if (v) v.play().catch(() => {}); };
-    tryPlay(heroVideoRef.current);
-    tryPlay(featureVideoRef.current);
-    const onTouch = () => {
-      tryPlay(heroVideoRef.current);
-      tryPlay(featureVideoRef.current);
+    const setup = (v: HTMLVideoElement | null) => {
+      if (!v) return;
+      v.muted = true;
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      const tryPlay = () => { v.play().catch(() => {}); };
+      v.addEventListener('canplay', tryPlay, { once: true });
+      v.load();
+      tryPlay();
     };
-    window.addEventListener('touchstart', onTouch, { once: true });
-    return () => window.removeEventListener('touchstart', onTouch);
+    setup(heroVideoRef.current);
+    setup(featureVideoRef.current);
+
+    const onInteraction = () => {
+      document.querySelectorAll('video').forEach(v => (v as HTMLVideoElement).play().catch(() => {}));
+    };
+    ['touchstart', 'touchend', 'click', 'scroll'].forEach(e =>
+      window.addEventListener(e, onInteraction, { once: true, passive: true })
+    );
+    return () => {
+      ['touchstart', 'touchend', 'click', 'scroll'].forEach(e =>
+        window.removeEventListener(e, onInteraction)
+      );
+    };
   }, []);
   const { scrollYProgress } = useScroll({ target: aboutRef, offset: ['start 0.8', 'end 0.2'] });
   const aboutText = useMemo(
