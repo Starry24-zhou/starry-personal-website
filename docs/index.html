@@ -15,6 +15,8 @@
     <meta name="twitter:title" content="Starry | AI训练师个人网站" />
     <meta name="twitter:description" content="Starry 的 AI 训练师个人网站，展示 AI 作品、F1 爱好、渲染集与个人简历。" />
     <link rel="icon" type="image/svg+xml" href="/starry-personal-website/favicon.svg" />
+    <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" crossorigin />
+    <link rel="dns-prefetch" href="https://d8j0ntlcm91z4.cloudfront.net" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -38,9 +40,25 @@
         right: 2rem !important;
         z-index: 9998 !important;
       }
+      @media (max-width: 640px) {
+        #dify-chatbot-bubble-window {
+          width: auto !important;
+          left: 0.75rem !important;
+          right: 0.75rem !important;
+          height: 70vh !important;
+          bottom: 4.5rem !important;
+        }
+      }
     </style>
-    <script type="module" crossorigin src="/starry-personal-website/assets/index-DRIDX_TM.js"></script>
-    <link rel="stylesheet" crossorigin href="/starry-personal-website/assets/index-CbJ1UIkK.css">
+    <script>
+      document.addEventListener('touchstart', function () {
+        document.querySelectorAll('video[autoplay]').forEach(function (v) {
+          v.play().catch(function () {});
+        });
+      }, { once: true });
+    </script>
+    <script type="module" crossorigin src="/starry-personal-website/assets/index-BqDvwZTe.js"></script>
+    <link rel="stylesheet" crossorigin href="/starry-personal-website/assets/index-B4H-LAG-.css">
   </head>
   <body>
     <div id="root"></div>

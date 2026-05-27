@@ -1,5 +1,5 @@
 import { motion, useInView, useScroll, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Check, X } from 'lucide-react';
+import { ArrowRight, X } from 'lucide-react';
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatedLetter } from './components/AnimatedLetter';
 import { WordsPullUp, WordsPullUpMultiStyle } from './components/WordsPullUp';
@@ -30,6 +30,7 @@ const features = [
     id: 'resume',
     title: '个人简历',
     icon: cardIcon03,
+    desc: '含 SFT 微调与 RAG 知识库项目落地经历，覆盖 AI 训练师全职履历、教育背景与技能总结。',
     items: [
       'SFT 微调与 RAG 知识库项目落地经历',
       '工作及实习经历，含 AI 训练师全职履历',
@@ -43,6 +44,7 @@ const features = [
     id: 'f1-overview',
     title: '个人爱好',
     icon: cardIcon01,
+    desc: 'F1 2026 赛季实时积分数据，含 22 位车手排名、11 支车队走势与完整阵容介绍。',
     items: [
       '2026 赛季车手积分榜，实时数据来自 Jolpica F1 API',
       '11 支车队积分排名，持续追踪赛季走势',
@@ -133,9 +135,7 @@ function FeatureCard({
 
 function TextCard({
   title,
-  number,
-  icon,
-  items,
+  desc,
   id,
   linkLabel,
   href,
@@ -180,7 +180,7 @@ function TextCard({
       id={id}
       href={href}
       onClick={handleCardClick}
-      className="relative flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.75rem] bg-[#212121] p-6 no-underline transition-transform duration-300 hover:-translate-y-1 sm:p-7"
+      className="group relative flex h-full min-h-[320px] cursor-pointer overflow-hidden rounded-[1.75rem] bg-[#212121] no-underline"
     >
       {videoSrc && (
         <video
@@ -194,31 +194,13 @@ function TextCard({
           src={videoSrc}
         />
       )}
-      {videoSrc && (
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20" />
-      )}
-      <div className={videoSrc ? 'relative z-10 flex h-full flex-col' : 'flex h-full flex-col'}>
-        <img src={icon} alt={title} className="h-10 w-10 rounded-xl object-cover sm:h-12 sm:w-12" />
-        <div className="mt-10 flex items-start justify-between gap-4">
-          <h3 className="max-w-[12ch] text-xl font-normal leading-tight text-[#E1E0CC] sm:text-2xl">
-            {title}
-          </h3>
-          {number && <span className="text-xs text-primary/60">({number})</span>}
-        </div>
-        <ul className="mt-8 space-y-3">
-          {items.map((item) => (
-            <li key={item} className="flex items-start gap-3 text-sm text-gray-400">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-        <span
-          className="mt-auto inline-flex items-center gap-2 pt-10 text-sm text-[#E1E0CC] transition-opacity hover:opacity-100"
-          style={{ opacity: 0.88 }}
-        >
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-80" />
+      <div className="absolute bottom-6 left-6 right-6">
+        <p className="text-xs uppercase tracking-[0.22em] text-primary/70">{title}</p>
+        <p className="mt-2 text-xl text-[#E1E0CC] sm:text-2xl">{desc}</p>
+        <span className="mt-3 inline-flex items-center gap-1.5 text-xs text-primary/60 transition-all duration-200 group-hover:gap-2.5 group-hover:text-primary/90">
           {linkLabel}
-          <ArrowRight className="h-4 w-4 -rotate-45" />
+          <ArrowRight className="h-3 w-3 -rotate-45" />
         </span>
       </div>
     </a>
