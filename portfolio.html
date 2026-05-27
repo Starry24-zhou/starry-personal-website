@@ -595,20 +595,23 @@
       /* ════════════════════════════════════════
          HELPERS
       ════════════════════════════════════════ */
+      /* Domains with locally-hosted favicon PNGs */
+      const LOCAL_FAVICONS = new Set([
+        'claude.ai','google.com','deepseek.com','moonshot.cn','metaso.cn','perplexity.ai','you.com',
+        'flowith.io','66paper.cn','stability.ai','liblib.art','looka.com','canva.com','pika.art',
+        'kling.ai','suno.com','fish.audio','aippt.cn','islide.cc','otter.ai','cursor.com',
+        'github.com','devin.ai','bing.com','character.ai','freepik.com','remove.bg',
+      ]);
+      /* Brand colors for SVG fallback icons (domains without local favicon) */
       const BRAND_COLORS = {
-        'chatgpt.com':'#10a37f','claude.ai':'#d97757','google.com':'#4285f4','doubao.com':'#3d7fff',
-        'deepseek.com':'#4e6ef2','moonshot.cn':'#7c5cfc','metaso.cn':'#ff6b35','perplexity.ai':'#20b2aa',
-        'you.com':'#ff4f00','wawawriter.com':'#8b5cf6','flowith.io':'#6366f1','66paper.cn':'#e11d48',
-        'midjourney.com':'#3d3d3d','stability.ai':'#6922d4','leonardo.ai':'#ff6b0a','liblib.art':'#e91e63',
-        'tusiart.com':'#1e40af','looka.com':'#0ea5e9','canva.com':'#00c4cc','gaoding.com':'#ff4040',
-        'openai.com':'#10a37f','runwayml.com':'#e11d48','pika.art':'#7c3aed','kling.ai':'#ff3d00',
-        'suno.com':'#c026d3','xfzhizuo.cn':'#1565c0','reecho.ai':'#0d9488','fish.audio':'#0369a1',
-        'gamma.app':'#8b5cf6','aippt.cn':'#e53e3e','islide.cc':'#00b4d8','chatexcel.com':'#217346',
-        'otter.ai':'#7c3aed','cursor.com':'#1a1a1a','github.com':'#24292e','trae.com.cn':'#0066ff',
-        'devin.ai':'#5f6368','coze.cn':'#4361ee','xfyun.cn':'#1e3a8a','manus.app':'#2c3e50',
-        'bing.com':'#00809d','character.ai':'#0ea5e9','freepik.com':'#1273eb','remove.bg':'#1cd4a7','z.ai':'#4f46e5',
+        'chatgpt.com':'#10a37f','doubao.com':'#3d7fff','wawawriter.com':'#8b5cf6',
+        'midjourney.com':'#3d3d3d','tusiart.com':'#1e40af','openai.com':'#10a37f',
+        'runwayml.com':'#e11d48','xfzhizuo.cn':'#1565c0','reecho.ai':'#0d9488',
+        'gamma.app':'#8b5cf6','chatexcel.com':'#217346','coze.cn':'#4361ee',
+        'xfyun.cn':'#1e3a8a','manus.app':'#2c3e50','z.ai':'#4f46e5',
+        'trae.com.cn':'#0066ff','leonardo.ai':'#ff6b0a','gaoding.com':'#ff4040',
       };
-      function _mkIcon(domain, name) {
+      function _svgIcon(domain, name) {
         let c = BRAND_COLORS[domain];
         if (!c) {
           let h = 0;
@@ -617,8 +620,20 @@
         }
         return `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" rx="8" fill="${c}"/><text x="16" y="22" text-anchor="middle" fill="white" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-weight="700" font-size="14">${name[0]}</text></svg>`;
       }
-      function iconHtml(fav, name) { return _mkIcon(fav, name); }
-      function rankIconHtml(fav, name) { return _mkIcon(fav, name); }
+      function iconHtml(fav, name) {
+        if (LOCAL_FAVICONS.has(fav)) {
+          const src = '/starry-personal-website/favicons/' + fav + '.png';
+          return `<img src="${src}" alt="${name}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="tool-icon-fb">${_svgIcon(fav, name)}</div>`;
+        }
+        return _svgIcon(fav, name);
+      }
+      function rankIconHtml(fav, name) {
+        if (LOCAL_FAVICONS.has(fav)) {
+          const src = '/starry-personal-website/favicons/' + fav + '.png';
+          return `<img src="${src}" alt="${name}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="rank-logo-fb">${_svgIcon(fav, name)}</div>`;
+        }
+        return _svgIcon(fav, name);
+      }
 
       const extIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>`;
       const arrIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
