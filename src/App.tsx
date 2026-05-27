@@ -232,8 +232,7 @@ export default function App() {
   const featureVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const setup = (v: HTMLVideoElement | null) => {
-      if (!v) return;
+    const loadAndPlay = (v: HTMLVideoElement) => {
       v.muted = true;
       v.setAttribute('playsinline', '');
       v.setAttribute('webkit-playsinline', '');
@@ -242,8 +241,22 @@ export default function App() {
       v.load();
       tryPlay();
     };
-    setup(heroVideoRef.current);
-    setup(featureVideoRef.current);
+
+    // Hero video: load immediately (above the fold)
+    const hv = heroVideoRef.current;
+    if (hv) loadAndPlay(hv);
+
+    // Feature video: lazy-load when card scrolls into view
+    const fv = featureVideoRef.current;
+    if (fv) {
+      const obs = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          loadAndPlay(fv);
+          obs.disconnect();
+        }
+      }, { rootMargin: '300px' });
+      obs.observe(fv);
+    }
 
     const onInteraction = () => {
       document.querySelectorAll('video').forEach(v => (v as HTMLVideoElement).play().catch(() => {}));
@@ -398,11 +411,10 @@ export default function App() {
                 <video
                   className="absolute inset-0 h-full w-full object-cover"
                   ref={featureVideoRef}
-                  autoPlay
                   loop
                   muted
                   playsInline
-                  preload="auto"
+                  preload="none"
                   src={featureVideo}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-80" />

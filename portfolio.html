@@ -595,21 +595,30 @@
       /* ════════════════════════════════════════
          HELPERS
       ════════════════════════════════════════ */
-      const FAV = d => `https://icons.duckduckgo.com/ip3/${d}.ico`;
-
-      function iconHtml(fav, fallback) {
-        return `
-          <img src="${FAV(fav)}" alt="" loading="lazy"
-            onerror="if(this.src.includes('duckduckgo')){this.src='https://${fav}/favicon.ico'}else{this.style.display='none';this.nextElementSibling.style.display='flex'}">
-          <div class="tool-icon-fb">${fallback[0]}</div>`;
+      const BRAND_COLORS = {
+        'chatgpt.com':'#10a37f','claude.ai':'#d97757','google.com':'#4285f4','doubao.com':'#3d7fff',
+        'deepseek.com':'#4e6ef2','moonshot.cn':'#7c5cfc','metaso.cn':'#ff6b35','perplexity.ai':'#20b2aa',
+        'you.com':'#ff4f00','wawawriter.com':'#8b5cf6','flowith.io':'#6366f1','66paper.cn':'#e11d48',
+        'midjourney.com':'#3d3d3d','stability.ai':'#6922d4','leonardo.ai':'#ff6b0a','liblib.art':'#e91e63',
+        'tusiart.com':'#1e40af','looka.com':'#0ea5e9','canva.com':'#00c4cc','gaoding.com':'#ff4040',
+        'openai.com':'#10a37f','runwayml.com':'#e11d48','pika.art':'#7c3aed','kling.ai':'#ff3d00',
+        'suno.com':'#c026d3','xfzhizuo.cn':'#1565c0','reecho.ai':'#0d9488','fish.audio':'#0369a1',
+        'gamma.app':'#8b5cf6','aippt.cn':'#e53e3e','islide.cc':'#00b4d8','chatexcel.com':'#217346',
+        'otter.ai':'#7c3aed','cursor.com':'#1a1a1a','github.com':'#24292e','trae.com.cn':'#0066ff',
+        'devin.ai':'#5f6368','coze.cn':'#4361ee','xfyun.cn':'#1e3a8a','manus.app':'#2c3e50',
+        'bing.com':'#00809d','character.ai':'#0ea5e9','freepik.com':'#1273eb','remove.bg':'#1cd4a7','z.ai':'#4f46e5',
+      };
+      function _mkIcon(domain, name) {
+        let c = BRAND_COLORS[domain];
+        if (!c) {
+          let h = 0;
+          for (let i = 0; i < domain.length; i++) h = domain.charCodeAt(i) + ((h << 5) - h);
+          c = 'hsl(' + (((h % 360) + 360) % 360) + ',55%,42%)';
+        }
+        return `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" rx="8" fill="${c}"/><text x="16" y="22" text-anchor="middle" fill="white" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-weight="700" font-size="14">${name[0]}</text></svg>`;
       }
-
-      function rankIconHtml(fav, fallback) {
-        return `
-          <img src="${FAV(fav)}" alt="" loading="lazy"
-            onerror="if(this.src.includes('duckduckgo')){this.src='https://${fav}/favicon.ico'}else{this.style.display='none';this.nextElementSibling.style.display='flex'}">
-          <div class="rank-logo-fb">${fallback[0]}</div>`;
-      }
+      function iconHtml(fav, name) { return _mkIcon(fav, name); }
+      function rankIconHtml(fav, name) { return _mkIcon(fav, name); }
 
       const extIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>`;
       const arrIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
@@ -626,12 +635,8 @@
         <article class="blogger-card si" style="transition-delay:${i * 60}ms">
           <div class="blogger-top">
             <div class="blogger-avatar" style="border-color:${b.color}44;position:relative;">
-              ${b.avatar
-                ? `<img src="${b.avatar}" alt="${b.name}" style="width:100%;height:100%;object-fit:cover;"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                   <span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(135deg,${b.color}33,${b.color}11);font-size:1.25rem;font-weight:800;color:${b.color};">${b.initial}</span>`
-                : `<span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(135deg,${b.color}33,${b.color}11);font-size:1.25rem;font-weight:800;color:${b.color};">${b.initial}</span>`
-              }
+              <span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(135deg,${b.color}33,${b.color}11);font-size:1.25rem;font-weight:800;color:${b.color};">${b.initial}</span>
+              ${b.avatar ? `<img src="${b.avatar}" alt="${b.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;opacity:0;transition:opacity 0.4s" onload="this.style.opacity='1'">` : ''}
             </div>
             <div>
               <div class="blogger-name">${b.name}</div>
