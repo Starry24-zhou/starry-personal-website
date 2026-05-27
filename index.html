@@ -22,8 +22,8 @@
       rel="stylesheet"
     />
     <title>Starry | AI训练师个人网站</title>
-    <script type="module" crossorigin src="/starry-personal-website/assets/index-DRIDX_TM.js"></script>
-    <link rel="stylesheet" crossorigin href="/starry-personal-website/assets/index-CbJ1UIkK.css">
+    <script type="module" crossorigin src="/starry-personal-website/assets/index-DiRrP_JS.js"></script>
+    <link rel="stylesheet" crossorigin href="/starry-personal-website/assets/index-CFYdCdtZ.css">
     <style>
       #dify-chatbot-bubble-button {
         background-color: #1C64F2 !important;
@@ -40,7 +40,23 @@
         right: 2rem !important;
         z-index: 9998 !important;
       }
+      @media (max-width: 640px) {
+        #dify-chatbot-bubble-window {
+          width: auto !important;
+          left: 0.75rem !important;
+          right: 0.75rem !important;
+          height: 70vh !important;
+          bottom: 4.5rem !important;
+        }
+      }
     </style>
+    <script>
+      document.addEventListener('touchstart', function () {
+        document.querySelectorAll('video[autoplay]').forEach(function (v) {
+          v.play().catch(function () {});
+        });
+      }, { once: true });
+    </script>
   </head>
   <body>
     <div id="root"></div>

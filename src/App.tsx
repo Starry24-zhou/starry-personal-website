@@ -221,13 +221,14 @@ export default function App() {
   return (
     <main className="bg-black text-[#E1E0CC]">
       <section id="home" className="h-screen bg-black p-4 md:p-6">
-        <div className="relative h-full overflow-hidden rounded-2xl bg-black md:rounded-[2rem]">
+        <div className="relative h-full overflow-hidden rounded-2xl bg-gradient-to-br from-neutral-900 via-black to-neutral-800 md:rounded-[2rem]">
           <video
             className="absolute inset-0 h-full w-full object-cover"
             autoPlay
             loop
             muted
             playsInline
+            preload="auto"
             src={heroVideo}
           />
           <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.7] mix-blend-overlay" />
