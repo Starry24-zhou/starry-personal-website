@@ -8,8 +8,8 @@ const heroVideo =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4';
 const featureVideo =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4';
-const resumeVideo = `${import.meta.env.BASE_URL}m2ohvc3120lud1oo2kerxjs47lj0jp9h1779804365631.mp4`;
-const hobbiesVideo = `${import.meta.env.BASE_URL}zu7lwolfxg352nd93ayuym9jbfz83xhg1779804424505.mp4`;
+const resumeVideo = '/m2ohvc3120lud1oo2kerxjs47lj0jp9h1779804365631.mp4';
+const hobbiesVideo = '/zu7lwolfxg352nd93ayuym9jbfz83xhg1779804424505.mp4';
 const cardIcon01 =
   'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85';
 const cardIcon03 =
