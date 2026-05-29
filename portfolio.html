@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI推荐 | Starry</title>
+    <meta name="description" content="Starry 精选全球优质 AI 工具、热门产品榜与 AI 博主推荐。" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
+    <style>
+      /* ── Variables ── */
+      :root {
+        --bg:      #000000;
+        --s1:      #101010;
+        --s2:      #181818;
+        --s3:      #212121;
+        --line:    rgba(255,255,255,0.08);
+        --line2:   rgba(255,255,255,0.15);
+        --text:    #e1e0cc;
+        --muted:   rgba(225,224,204,0.68);
+        --dim:     rgba(225,224,204,0.42);
+        --primary: #dedbc8;
+        --yellow:  #dfff00;
+      }
+
+      * { box-sizing: border-box; font-family: 'Almarai', -apple-system, sans-serif; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0; min-width: 320px;
+        background: var(--bg); color: var(--text);
+        background-image:
+          radial-gradient(circle at top left,  rgba(255,255,255,0.04), transparent 30%),
+          radial-gradient(circle at bottom right, rgba(255,255,255,0.03), transparent 26%);
+      }
+      a { color: inherit; text-decoration: none; }
+
+      /* ── Layout ── */
+      .page {
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 80px;
+      }
+
+      /* ── Nav ── */
+      .nav {
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 16px;
+        margin-bottom: 28px;
+      }
+      .brand {
+        font-size: 0.88rem; letter-spacing: 0.26em;
+        text-transform: uppercase; color: var(--primary);
+      }
+      .back-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px;
+        color: var(--muted); font-size: 0.82rem;
+        transition: color .25s, border-color .25s, transform .25s;
+      }
+      .back-btn:hover { color: var(--text); border-color: var(--line2); transform: translateY(-2px); }
+
+      /* ── Hero ── */
+      .hero {
+        border: 1px solid var(--line); border-radius: 32px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+        padding: 36px 32px;
+      }
+      .eyebrow {
+        margin: 0; font-size: 0.72rem; letter-spacing: 0.24em;
+        text-transform: uppercase; color: var(--dim);
+      }
+      .hero-title {
+        margin: 16px 0 0;
+        font-size: clamp(3rem, 8vw, 7rem);
+        line-height: 0.92; letter-spacing: -0.06em;
+      }
+      .hero-title em {
+        font-family: 'Instrument Serif', serif; font-style: italic;
+        font-weight: 400; color: rgba(225,224,204,0.5);
+      }
+      .hero-copy {
+        max-width: 680px; margin: 22px 0 0;
+        color: var(--muted); font-size: 0.98rem; line-height: 1.8;
+      }
+      .hero-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+      .htag {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px;
+        font-size: 0.76rem; color: var(--dim);
+      }
+      .htag-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: var(--yellow);
+        animation: blink 2s ease infinite;
+      }
+      @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+      /* ── Section wrapper ── */
+      .section {
+        margin-top: 16px; border: 1px solid var(--line);
+        border-radius: 28px; background: var(--s1); padding: 28px;
+      }
+      .sec-head {
+        display: flex; align-items: flex-end;
+        justify-content: space-between; gap: 12px; flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+      .sec-eyebrow {
+        margin: 0 0 7px; font-size: 0.7rem; letter-spacing: 0.24em;
+        text-transform: uppercase; color: var(--dim);
+      }
+      .sec-title {
+        margin: 0; font-size: clamp(1.5rem, 3.5vw, 2.4rem); line-height: 1;
+      }
+      .sec-desc {
+        margin: 8px 0 0; font-size: 0.85rem; color: var(--dim); max-width: 520px;
+      }
+      .sec-source {
+        font-size: 0.68rem; color: var(--dim); white-space: nowrap; align-self: flex-end;
+        border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
+        display: none;
+      }
+      .sec-source a { color: var(--dim); transition: color .2s; }
+      .sec-source a:hover { color: var(--muted); }
+
+      /* ── Category Tabs ── */
+      .tabs {
+        display: flex; flex-wrap: wrap; gap: 8px;
+        margin-bottom: 22px;
+      }
+      .tab-btn {
+        padding: 6px 14px; border-radius: 999px; cursor: pointer; border: none;
+        font-size: 0.78rem; font-family: inherit;
+        background: transparent; border: 1px solid var(--line); color: var(--dim);
+        transition: background .2s, color .2s, border-color .2s;
+      }
+      .tab-btn:hover { border-color: var(--line2); color: var(--muted); }
+      .tab-btn.active {
+        background: var(--yellow); color: #000; border-color: var(--yellow);
+        font-weight: 700;
+      }
+
+      /* ── Tool Cards Grid ── */
+      .tool-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 12px;
+      }
+      .tool-card {
+        border: 1px solid var(--line); border-radius: 18px;
+        background: var(--s2); padding: 18px;
+        display: flex; flex-direction: column; gap: 0;
+        transition: border-color .25s, transform .25s;
+        text-decoration: none;
+      }
+      .tool-card:hover { border-color: var(--line2); transform: translateY(-3px); }
+      .tool-card.hidden { display: none; }
+
+      .tool-card-top {
+        display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+      }
+      .tool-icon-wrap {
+        width: 40px; height: 40px; border-radius: 10px;
+        overflow: hidden; flex-shrink: 0;
+        background: var(--s3);
+        display: flex; align-items: center; justify-content: center;
+      }
+      .tool-icon-wrap img { width: 100%; height: 100%; object-fit: contain; }
+      .tool-icon-fb {
+        width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.1rem; font-weight: 800; color: var(--dim);
+        display: none;
+      }
+      .tool-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+      .tool-cat {
+        display: inline-block; margin-top: 3px;
+        padding: 1px 8px; border-radius: 4px;
+        font-size: 0.62rem; letter-spacing: 0.14em;
+        background: rgba(223,255,0,0.08); color: var(--yellow);
+      }
+      .tool-desc {
+        font-size: 0.8rem; color: var(--dim); line-height: 1.6; flex: 1;
+      }
+      .tool-link {
+        margin-top: 14px; display: inline-flex; align-items: center; gap: 5px;
+        font-size: 0.72rem; color: var(--dim);
+        transition: color .2s, gap .2s;
+      }
+      .tool-card:hover .tool-link { color: var(--primary); gap: 8px; }
+      .tool-link svg { width: 11px; height: 11px; }
+
+      /* ── Ranking List ── */
+      .rank-list { display: flex; flex-direction: column; gap: 10px; }
+      .rank-item {
+        display: flex; align-items: center; gap: 16px;
+        border: 1px solid var(--line); border-radius: 16px;
+        background: var(--s2); padding: 14px 18px;
+        text-decoration: none;
+        transition: border-color .25s, transform .25s, background .25s;
+      }
+      .rank-item:hover { border-color: var(--line2); transform: translateX(4px); background: var(--s3); }
+
+      .rank-num {
+        flex-shrink: 0; width: 36px; text-align: center;
+        font-size: 1.1rem; font-weight: 900; letter-spacing: -0.04em;
+        color: var(--dim);
+      }
+      .rank-num.gold   { font-size: 1.5rem; color: #FFD700; }
+      .rank-num.silver { font-size: 1.4rem; color: #C0C0C0; }
+      .rank-num.bronze { font-size: 1.3rem; color: #CD7F32; }
+
+      .rank-logo {
+        flex-shrink: 0; width: 38px; height: 38px; border-radius: 9px;
+        overflow: hidden; background: var(--s3);
+        display: flex; align-items: center; justify-content: center;
+      }
+      .rank-logo img { width: 100%; height: 100%; object-fit: contain; }
+      .rank-logo-fb {
+        font-size: 1rem; font-weight: 800; color: var(--dim); display: none;
+      }
+
+      .rank-info { flex: 1; min-width: 0; }
+      .rank-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .rank-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+      .rank-tag {
+        font-size: 0.62rem; padding: 2px 8px; border-radius: 4px;
+        background: rgba(255,255,255,0.06); color: var(--dim);
+        letter-spacing: 0.1em;
+      }
+      .rank-desc { font-size: 0.78rem; color: var(--dim); margin-top: 3px; }
+
+      .rank-metric {
+        flex-shrink: 0; text-align: right;
+        font-size: 0.72rem; color: var(--dim); white-space: nowrap;
+        padding: 4px 10px; border: 1px solid var(--line); border-radius: 6px;
+      }
+      .rank-metric.growth { color: #4ade80; border-color: rgba(74,222,128,0.2); }
+
+      .rank-arr { flex-shrink: 0; color: var(--dim); opacity: 0; transition: opacity .2s; }
+      .rank-item:hover .rank-arr { opacity: 1; }
+
+      /* ── Blogger Placeholder ── */
+      .placeholder-box {
+        border: 1px dashed var(--line2); border-radius: 20px;
+        padding: 60px 24px; text-align: center;
+      }
+      .placeholder-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--yellow); margin: 0 auto 20px;
+        animation: blink 2s ease infinite;
+      }
+      .placeholder-title { font-size: 1.1rem; color: var(--muted); margin: 0 0 8px; font-weight: 700; }
+      .placeholder-sub { font-size: 0.84rem; color: var(--dim); margin: 0; }
+
+      /* Blogger card template (hidden, for future use) */
+      .blogger-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 14px; margin-top: 22px;
+      }
+      .blogger-card {
+        border: 1px solid var(--line); border-radius: 20px;
+        background: var(--s2); padding: 22px;
+        display: flex; flex-direction: column; gap: 0;
+        transition: border-color .25s, transform .25s;
+      }
+      .blogger-card:hover { border-color: var(--line2); transform: translateY(-3px); }
+      .blogger-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+      .blogger-avatar {
+        width: 52px; height: 52px; border-radius: 50%;
+        overflow: hidden; flex-shrink: 0;
+        background: var(--s3); border: 2px solid var(--line);
+      }
+      .blogger-avatar img { width: 100%; height: 100%; object-fit: cover; }
+      .blogger-name { font-size: 1rem; font-weight: 700; color: var(--text); }
+      .blogger-platform-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+      .blogger-platform {
+        font-size: 0.62rem; padding: 2px 8px; border-radius: 4px;
+        background: rgba(255,255,255,0.06); color: var(--dim);
+      }
+      .blogger-desc { font-size: 0.82rem; color: var(--dim); line-height: 1.65; margin-bottom: 16px; flex: 1; }
+      .blogger-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 0.78rem; color: var(--primary);
+        border: 1px solid var(--line); border-radius: 999px;
+        padding: 6px 14px; transition: border-color .2s;
+        align-self: flex-start;
+      }
+      .blogger-link:hover { border-color: var(--line2); }
+
+      /* ── Reveal Animations ── */
+      .reveal {
+        opacity: 0; transform: translateY(26px);
+        transition: opacity .65s cubic-bezier(.22,1,.36,1),
+                    transform .65s cubic-bezier(.22,1,.36,1);
+      }
+      .reveal.in { opacity: 1; transform: translateY(0); }
+
+      .si {
+        opacity: 0; transform: scale(.97) translateY(12px);
+        transition: opacity .5s cubic-bezier(.22,1,.36,1),
+                    transform .5s cubic-bezier(.22,1,.36,1);
+      }
+      .si.in { opacity: 1; transform: scale(1) translateY(0); }
+
+      /* ── Footer ── */
+      .site-footer { border-top: 1px solid var(--line); padding: 28px 0; }
+      .footer-inner {
+        width: min(1200px, calc(100% - 32px)); margin: 0 auto;
+        display: flex; flex-direction: column; gap: 10px;
+      }
+      @media (min-width: 640px) {
+        .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; }
+      }
+      .ft-brand { margin: 0; font-size: .7rem; letter-spacing: .26em; text-transform: uppercase; color: var(--dim); }
+      .ft-sub   { margin: 4px 0 0; font-size: .73rem; color: rgba(255,255,255,.16); }
+      .ft-copy  { margin: 0; font-size: .73rem; color: rgba(255,255,255,.16); }
+
+      /* ── Responsive ── */
+      @media (max-width: 720px) {
+        .tool-grid { grid-template-columns: repeat(2, 1fr); }
+        .rank-metric { display: none; }
+      }
+      @media (max-width: 480px) {
+        .tool-grid { grid-template-columns: 1fr; }
+        .page { width: min(100% - 20px, 1200px); padding-top: 16px; }
+        .hero { padding: 22px 20px; border-radius: 26px; }
+        .section { padding: 20px 16px; border-radius: 22px; }
+        .rank-desc { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="page">
+
+      <!-- ── Nav ── -->
+      <div class="nav">
+        <span class="brand">AI RECOMMEND</span>
+        <a class="back-btn" href="/">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          返回首页
+        </a>
+      </div>
+
+      <!-- ── Hero ── -->
+      <section class="hero reveal">
+        <p class="eyebrow">AI TRAINER / RECOMMEND · 2026</p>
+        <h1 class="hero-title">AI推荐 <em>精选好物</em></h1>
+        <p class="hero-copy">
+          精选全球优质 AI 工具、热门产品榜与博主推荐，覆盖对话、绘图、视频、编程等多个场景，持续追踪 AI 行业动态。
+        </p>
+        <div class="hero-tags">
+          <span class="htag"><span class="htag-dot"></span>持续更新</span>
+          <span class="htag">40+ AI 工具</span>
+          <span class="htag">Top 20 产品榜</span>
+          <span class="htag">10 大分类</span>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION 1 · AI 工具推荐
+      ══════════════════════════════════════ -->
+      <section class="section reveal" id="tools" style="transition-delay:.06s">
+        <div class="sec-head">
+          <div>
+            <p class="sec-eyebrow">AI TOOLS</p>
+            <h2 class="sec-title">AI 工具推荐</h2>
+            <p class="sec-desc">精选全球热门 AI 工具，按分类快速找到适合你的利器</p>
+          </div>
+          <span class="sec-source">数据参考 <a href="https://www.aig123.com/" target="_blank" rel="noopener">aig123.com</a></span>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="tabs" id="tool-tabs"></div>
+
+        <!-- Tool Cards -->
+        <div class="tool-grid" id="tool-grid"></div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION 2 · AI 产品榜
+      ══════════════════════════════════════ -->
+      <section class="section reveal" id="ranking" style="transition-delay:.1s">
+        <div class="sec-head">
+          <div>
+            <p class="sec-eyebrow">AI PRODUCT CHART</p>
+            <h2 class="sec-title">AI 产品榜</h2>
+            <p class="sec-desc">实时追踪全球热门 AI 产品访问量与增长趋势，数据按月更新</p>
+          </div>
+          <span class="sec-source">数据来源 <a href="https://www.aicpb.com/zh" target="_blank" rel="noopener">aicpb.com</a></span>
+        </div>
+
+        <div class="rank-list" id="rank-list"></div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION 3 · AI 博主推荐
+      ══════════════════════════════════════ -->
+      <section class="section reveal" id="creators" style="transition-delay:.14s">
+        <div class="sec-head">
+          <div>
+            <p class="sec-eyebrow">AI CREATOR</p>
+            <h2 class="sec-title">AI 博主推荐</h2>
+            <p class="sec-desc">精选优质 AI 内容创作者，持续输出干货的博主推荐</p>
+          </div>
+        </div>
+
+        <div class="blogger-grid" id="blogger-grid"></div>
+      </section>
+
+    </div><!-- /.page -->
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <p class="ft-brand">STARRY</p>
+          <p class="ft-sub">AI Trainer · Personal Website</p>
+        </div>
+        <p class="ft-copy">© 2026 Starry · All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      /* ════════════════════════════════════════
+         DATA
+      ════════════════════════════════════════ */
+
+      const BLOGGERS = [
+        {
+          name: '秋芝2046',
+          initial: '秋',
+          color: '#c8a84b',
+          avatar: '/avatars/qiuzhi2046.jpg',
+          platforms: ['抖音', 'B站'],
+          desc: '前互联网产品经理，全网 245 万粉丝。擅长横向对比测评，帮你快速找到真正值得用的 AI 工具，风格亲切实用。',
+          url: 'https://www.douyin.com/search/秋芝2046',
+          linkText: '抖音搜索',
+        },
+        {
+          name: 'K森动画',
+          initial: 'K',
+          color: '#6ab04c',
+          avatar: '/avatars/ksendonghua.jpg',
+          platforms: ['抖音', 'B站'],
+          desc: '专注 AI 动画创作，深入探索 AI 在影视动画领域的应用，兼顾创意灵感与实操流程，适合对 AIGC 创作感兴趣的你。',
+          url: 'https://space.bilibili.com/282497876/',
+          linkText: 'B站主页',
+        },
+        {
+          name: '数字游牧人Samuel',
+          initial: 'S',
+          color: '#4a90d9',
+          avatar: '/avatars/samuel.jpg',
+          platforms: ['抖音', 'B站'],
+          desc: 'AI + 数字游民生活方式博主，前微软工程师。分享远程工作工具、效率方法与副业变现实践，适合想用 AI 重构工作方式的人。',
+          url: 'https://space.bilibili.com/4848323/',
+          linkText: 'B站主页',
+        },
+        {
+          name: 'Xuan酱',
+          initial: 'X',
+          color: '#e05c9a',
+          avatar: '/avatars/xuanjiang.jpg',
+          platforms: ['抖音', 'B站'],
+          desc: '全职 AI 自媒体，全网 50 万+关注。专注 AI 工具实操教程，手把手演示使用技巧，内容通俗易懂，新手友好。',
+          url: 'https://space.bilibili.com/14848367/',
+          linkText: 'B站主页',
+        },
+        {
+          name: '技术爬爬虾',
+          initial: '虾',
+          color: '#e07b3a',
+          avatar: '/avatars/jspaxia.jpg',
+          platforms: ['抖音', 'B站', 'YouTube'],
+          desc: '全网同名，以工程师视角拆解 AI 工具与技术实现，内容扎实深入，兼顾环境搭建、源码分析与实战演示。',
+          url: 'https://space.bilibili.com/316183842/',
+          linkText: 'B站主页',
+        },
+        {
+          name: '林亦LYi',
+          initial: '林',
+          color: '#9b59b6',
+          avatar: '/avatars/linyi.jpg',
+          platforms: ['抖音', 'B站', 'YouTube'],
+          desc: '全网约 300 万粉丝，B 站知识区 2023 金知奖得主。深度 AI 科普，用通俗语言解读前沿模型与行业趋势。',
+          url: 'https://space.bilibili.com/4401694/',
+          linkText: 'B站主页',
+        },
+        {
+          name: '荒蛋记录员',
+          initial: '荒',
+          color: '#3ab8a0',
+          avatar: '/avatars/huangdan.jpg',
+          platforms: ['抖音', 'B站'],
+          desc: '用 AIGC 记录一只猫咪的日常 vlog，风格治愈独特。是少数将 AI 创作深度融入生活叙事的内容博主，单视频播放破千万。',
+          url: 'https://space.bilibili.com/3632303408417140/',
+          linkText: 'B站主页',
+        },
+        {
+          name: '跟李沐学AI',
+          initial: '李',
+          color: '#e84393',
+          avatar: '/avatars/limu.jpg',
+          platforms: ['B站', 'YouTube'],
+          desc: 'B 站 112 万粉丝，前亚马逊首席科学家。以严谨的学术背景讲解深度学习与大模型原理，内容硬核，开发者必关注。',
+          url: 'https://space.bilibili.com/1567748478/',
+          linkText: 'B站主页',
+        },
+      ];
+
+      const CATS = ['全部','对话','搜索','写作','绘图','设计','视频','音频','办公','编程','Agent'];
+
+      const TOOLS = [
+        /* 对话 */
+        { name:'ChatGPT',          cat:'对话', desc:'全球最强大的AI对话程序，引领生成式AI浪潮',     url:'https://chatgpt.com',                      fav:'chatgpt.com' },
+        { name:'Claude',           cat:'对话', desc:'Anthropic研发，擅长长文本分析与复杂推理',      url:'https://claude.ai',                         fav:'claude.ai' },
+        { name:'Gemini',           cat:'对话', desc:'Google原生多模态AI，深度整合搜索生态',         url:'https://gemini.google.com',                 fav:'google.com' },
+        { name:'豆包',             cat:'对话', desc:'字节跳动出品，中文场景表现卓越',               url:'https://doubao.com',                         fav:'doubao.com' },
+        { name:'DeepSeek',         cat:'对话', desc:'国产开源领先大模型，推理能力强，性价比极高',    url:'https://deepseek.com',                       fav:'deepseek.com' },
+        { name:'Kimi',             cat:'对话', desc:'月之暗面出品，支持超长文档理解与分析',          url:'https://kimi.moonshot.cn',                   fav:'moonshot.cn' },
+        /* 搜索 */
+        { name:'秘塔AI搜索',       cat:'搜索', desc:'无广告直达结果，AI原生搜索，精准高效',          url:'https://metaso.cn',                          fav:'metaso.cn' },
+        { name:'Perplexity',       cat:'搜索', desc:'结合搜索与AI推理，实时知识问答神器',            url:'https://perplexity.ai',                      fav:'perplexity.ai' },
+        { name:'YOU.com',          cat:'搜索', desc:'个性化AI搜索引擎，多模型聚合整合',              url:'https://you.com',                            fav:'you.com' },
+        /* 写作 */
+        { name:'Wawawriter',       cat:'写作', desc:'超级AI写作助手，多场景内容一键生成',            url:'https://wawawriter.com',                     fav:'wawawriter.com' },
+        { name:'Flowith',          cat:'写作', desc:'画布式AI写作工作台，节点交互沉浸创作',          url:'https://flowith.io',                         fav:'flowith.io' },
+        { name:'66论文',           cat:'写作', desc:'高质量学术写作助手，一键生成规范论文',          url:'https://66paper.cn',                         fav:'66paper.cn' },
+        /* 绘图 */
+        { name:'Midjourney',       cat:'绘图', desc:'行业标杆AI艺术生成，品质一流',                url:'https://midjourney.com',                     fav:'midjourney.com' },
+        { name:'Stable Diffusion', cat:'绘图', desc:'最强开源AI绘图模型，可本地部署',              url:'https://stability.ai',                       fav:'stability.ai' },
+        { name:'Leonardo.ai',      cat:'绘图', desc:'功能全面的免费AI艺术生成平台',               url:'https://leonardo.ai',                        fav:'leonardo.ai' },
+        { name:'LibLib AI',        cat:'绘图', desc:'国内领先AI创意平台，海量精选模型',             url:'https://liblib.art',                         fav:'liblib.art' },
+        { name:'Tusiart',          cat:'绘图', desc:'全面免费的AI绘图平台，操作简洁',              url:'https://tusiart.com',                        fav:'tusiart.com' },
+        /* 设计 */
+        { name:'Looka',            cat:'设计', desc:'AI辅助Logo与品牌设计，一站式工具',            url:'https://looka.com',                          fav:'looka.com' },
+        { name:'Canva',            cat:'设计', desc:'全球最受欢迎的AI辅助创意设计平台',             url:'https://canva.com',                          fav:'canva.com' },
+        { name:'稿定设计',         cat:'设计', desc:'综合AI设计平台，模板丰富，易于上手',           url:'https://gaoding.com',                        fav:'gaoding.com' },
+        /* 视频 */
+        { name:'Sora',             cat:'视频', desc:'OpenAI发布的文生视频AI模型，质量业界顶尖',    url:'https://sora.com',                           fav:'openai.com' },
+        { name:'Runway',           cat:'视频', desc:'专业AI视频创作与编辑，好莱坞级工具',          url:'https://runwayml.com',                       fav:'runwayml.com' },
+        { name:'Pika',             cat:'视频', desc:'多风格AI视频一键生成，简单易用',              url:'https://pika.art',                           fav:'pika.art' },
+        { name:'可灵AI',           cat:'视频', desc:'快手旗下新一代AI视频生成，增长最快',           url:'https://kling.ai',                           fav:'kling.ai' },
+        /* 音频 */
+        { name:'Suno',             cat:'音频', desc:'一句话生成完整歌曲，AI音乐创作神器',           url:'https://suno.com',                           fav:'suno.com' },
+        { name:'讯飞智作',         cat:'音频', desc:'一站式AI音视频创作平台，功能全面',             url:'https://xfzhizuo.cn',                        fav:'xfzhizuo.cn' },
+        { name:'Reecho',           cat:'音频', desc:'超真实AI语音合成与声音克隆',                 url:'https://reecho.ai',                          fav:'reecho.ai' },
+        { name:'Fish Audio',       cat:'音频', desc:'面向所有人的AI音频生成工具，开箱即用',         url:'https://fish.audio',                         fav:'fish.audio' },
+        /* 办公 */
+        { name:'Gamma',            cat:'办公', desc:'AI智能生成精美演示文稿，3分钟完成PPT',        url:'https://gamma.app',                          fav:'gamma.app' },
+        { name:'AiPPT',            cat:'办公', desc:'国内AI PPT生成首选，免费快速',               url:'https://aippt.cn',                           fav:'aippt.cn' },
+        { name:'iSlide',           cat:'办公', desc:'AI驱动的PPT设计增强平台，模板精良',          url:'https://islide.cc',                          fav:'islide.cc' },
+        { name:'ChatExcel',        cat:'办公', desc:'自然语言操控表格，AI数据分析助手',            url:'https://chatexcel.com',                      fav:'chatexcel.com' },
+        { name:'Otter.ai',         cat:'办公', desc:'AI会议实时记录与摘要，协作提效',              url:'https://otter.ai',                           fav:'otter.ai' },
+        /* 编程 */
+        { name:'Cursor',           cat:'编程', desc:'AI原生代码编辑器，重新定义开发效率',          url:'https://cursor.com',                         fav:'cursor.com' },
+        { name:'GitHub Copilot',   cat:'编程', desc:'全球最广泛使用的AI代码补全助手',             url:'https://github.com/features/copilot',        fav:'github.com' },
+        { name:'Trae',             cat:'编程', desc:'AI编程助手，支持自动检测与错误修复',          url:'https://trae.com.cn',                        fav:'trae.com.cn' },
+        { name:'Devin',            cat:'编程', desc:'首个AI软件工程师，自主完成完整编程任务',       url:'https://devin.ai',                           fav:'devin.ai' },
+        /* Agent */
+        { name:'Coze',             cat:'Agent',desc:'字节跳动出品，快速搭建与部署AI Agent',       url:'https://coze.cn',                            fav:'coze.cn' },
+        { name:'星辰Agent',        cat:'Agent',desc:'讯飞旗下Agent开发与运营一体化平台',           url:'https://agent.xfyun.cn',                     fav:'xfyun.cn' },
+        { name:'Manus',            cat:'Agent',desc:'通用AI代理平台，自主规划并执行复杂任务',       url:'https://manus.app',                          fav:'manus.app' },
+      ];
+
+      const RANK = [
+        { rank:1,  name:'ChatGPT',        tag:'AI对话', desc:'全球最大AI对话平台，引领生成式AI浪潮',  metric:'5.69B 月访问',    url:'https://chatgpt.com',                fav:'chatgpt.com',   growth:false },
+        { rank:2,  name:'New Bing',       tag:'AI搜索', desc:'微软整合GPT-4的新一代AI搜索引擎',      metric:'3.58B 月访问',    url:'https://bing.com',                   fav:'bing.com',      growth:false },
+        { rank:3,  name:'DeepSeek',       tag:'AI对话', desc:'国产开源大模型，全球用户快速增长',       metric:'4.87亿 月访问',   url:'https://deepseek.com',               fav:'deepseek.com',  growth:false },
+        { rank:4,  name:'豆包',           tag:'AI助手', desc:'字节跳动旗下，中文AI助手使用首选',      metric:'3.36亿 月活',     url:'https://doubao.com',                 fav:'doubao.com',    growth:false },
+        { rank:5,  name:'GitHub Copilot', tag:'AI编程', desc:'全球最广泛使用的AI代码助手',           metric:'3.81亿 月访问',   url:'https://github.com/copilot',         fav:'github.com',    growth:false },
+        { rank:6,  name:'Character AI',   tag:'AI角色', desc:'AI虚拟角色对话平台，年轻用户热捧',      metric:'2.07亿 月访问',   url:'https://character.ai',               fav:'character.ai',  growth:false },
+        { rank:7,  name:'Kling AI',       tag:'AI视频', desc:'快手出品AI视频生成平台，增长最快',      metric:'↑ 451.8% 月增',   url:'https://kling.ai',                   fav:'kling.ai',      growth:true  },
+        { rank:8,  name:'Perplexity',     tag:'AI搜索', desc:'实时联网知识搜索引擎，精准直答',        metric:'知识型AI搜索',    url:'https://perplexity.ai',              fav:'perplexity.ai', growth:false },
+        { rank:9,  name:'Freepik AI',     tag:'AI图像', desc:'设计师常用AI图像生成与素材平台',        metric:'9834万 月访问',   url:'https://freepik.com',                fav:'freepik.com',   growth:false },
+        { rank:10, name:'Suno',           tag:'AI音乐', desc:'一句话生成完整歌曲，颠覆音乐创作',      metric:'8561万 月访问',   url:'https://suno.com',                   fav:'suno.com',      growth:false },
+        { rank:11, name:'Midjourney',     tag:'AI绘图', desc:'行业标杆AI艺术生成工具，品质上乘',      metric:'行业领导者',      url:'https://midjourney.com',             fav:'midjourney.com',growth:false },
+        { rank:12, name:'Remove.bg',      tag:'AI图像', desc:'一键AI智能抠图，精度业内领先',         metric:'6428万 月访问',   url:'https://remove.bg',                  fav:'remove.bg',     growth:false },
+        { rank:13, name:'Cursor',         tag:'AI编程', desc:'AI原生代码编辑器，开发者社区首选',      metric:'开发者热门',      url:'https://cursor.com',                 fav:'cursor.com',    growth:false },
+        { rank:14, name:'Gamma',          tag:'AI办公', desc:'AI智能演示文稿生成，商务场景首选',      metric:'3355万 月访问',   url:'https://gamma.app',                  fav:'gamma.app',     growth:false },
+        { rank:15, name:'Runway',         tag:'AI视频', desc:'专业AI视频创作与编辑，好莱坞级别',      metric:'创意生成领域',    url:'https://runwayml.com',               fav:'runwayml.com',  growth:false },
+        { rank:16, name:'Claude',         tag:'AI对话', desc:'Anthropic旗舰产品，长文本处理最强',     metric:'Anthropic旗舰',   url:'https://claude.ai',                  fav:'claude.ai',     growth:false },
+        { rank:17, name:'Otter.ai',       tag:'AI办公', desc:'实时会议AI记录与摘要神器',             metric:'788万 月访问',    url:'https://otter.ai',                   fav:'otter.ai',      growth:false },
+        { rank:18, name:'Manus',          tag:'AI代理', desc:'通用AI智能体，自主执行复杂任务',        metric:'社区新锐',        url:'https://manus.app',                  fav:'manus.app',     growth:false },
+        { rank:19, name:'Gemini',         tag:'AI对话', desc:'Google多模态AI，深度整合全系产品',      metric:'Google生态',      url:'https://gemini.google.com',          fav:'google.com',    growth:false },
+        { rank:20, name:'Z.ai',           tag:'AI对话', desc:'新兴AI对话平台，增长势头强劲',          metric:'↑ 24.6% 月增',    url:'https://z.ai',                       fav:'z.ai',          growth:true  },
+      ];
+
+      /* ════════════════════════════════════════
+         HELPERS
+      ════════════════════════════════════════ */
+      /* Domains with locally-hosted favicon PNGs */
+      const LOCAL_FAVICONS = new Set([
+        'claude.ai','google.com','deepseek.com','moonshot.cn','metaso.cn','perplexity.ai','you.com',
+        'flowith.io','66paper.cn','stability.ai','liblib.art','looka.com','canva.com','pika.art',
+        'kling.ai','suno.com','fish.audio','aippt.cn','islide.cc','otter.ai','cursor.com',
+        'github.com','devin.ai','bing.com','character.ai','freepik.com','remove.bg',
+        'doubao.com','coze.cn','xfyun.cn','xfzhizuo.cn','gaoding.com','trae.com.cn',
+        'wawawriter.com','manus.app',
+      ]);
+      /* Official brand SVGs for domains without accessible favicon files */
+      const BRAND_SVGS = {
+        'chatgpt.com': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" rx="7" fill="#0d0d0d"/><g transform="translate(4,4)" fill="white"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></g></svg>`,
+        'openai.com': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" rx="7" fill="#0d0d0d"/><g transform="translate(4,4)" fill="white"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></g></svg>`,
+        'midjourney.com': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" fill="#000"/><path d="M5 24 L10.5 10 L16 20 L21.5 10 L27 24 Z" fill="white" opacity="0.92"/><line x1="5" y1="27" x2="27" y2="27" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`,
+        'runwayml.com': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" fill="#000"/><circle cx="16" cy="16" r="11" stroke="white" stroke-width="1.5" fill="none"/><path d="M13.5 11.5 L22 16 L13.5 20.5 Z" fill="white"/></svg>`,
+        'gamma.app': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" fill="#7c3aed"/><path d="M16 4 L17.6 13.4 L27 16 L17.6 18.6 L16 28 L14.4 18.6 L5 16 L14.4 13.4 Z" fill="white"/></svg>`,
+        'leonardo.ai': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" fill="#0f0f1a"/><path d="M10 6 L10 26 L22 26 L22 22 L14 22 L14 6 Z" fill="#ff6b0a"/></svg>`,
+        'z.ai': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" fill="#1a1a2e"/><path d="M8 10 L24 10 L9 22 L24 22" stroke="#818cf8" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        'reecho.ai': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" fill="#0d9488"/><rect x="8" y="12" width="4" height="8" rx="2" fill="white"/><rect x="14" y="8" width="4" height="16" rx="2" fill="white"/><rect x="20" y="14" width="4" height="6" rx="2" fill="white"/></svg>`,
+        'tusiart.com': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" fill="#1e3a8a"/><path d="M21 7 C23.5 7 25 9 25 11.5 C25 14 23 15.5 21 16.5 L13 23 L10 20 L17 13 C18.5 11 19.5 7 21 7 Z" fill="white" opacity="0.9"/><circle cx="10.5" cy="21.5" r="3" fill="white"/></svg>`,
+        'chatexcel.com': `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" fill="#217346"/><rect x="6" y="7" width="20" height="18" rx="2" fill="none" stroke="white" stroke-width="1.5"/><line x1="6" y1="16" x2="26" y2="16" stroke="white" stroke-width="1.5"/><line x1="15" y1="7" x2="15" y2="25" stroke="white" stroke-width="1.5"/><rect x="7.5" y="8.5" width="6" height="6" rx="0.5" fill="white" opacity="0.3"/></svg>`,
+      };
+      function _svgIcon(domain, name) {
+        if (BRAND_SVGS[domain]) return BRAND_SVGS[domain];
+        let h = 0;
+        for (let i = 0; i < domain.length; i++) h = domain.charCodeAt(i) + ((h << 5) - h);
+        const c = 'hsl(' + (((h % 360) + 360) % 360) + ',55%,42%)';
+        return `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="32" height="32" rx="8" fill="${c}"/><text x="16" y="22" text-anchor="middle" fill="white" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-weight="700" font-size="14">${name[0]}</text></svg>`;
+      }
+      function iconHtml(fav, name) {
+        if (LOCAL_FAVICONS.has(fav)) {
+          const src = '/favicons/' + fav + '.png';
+          return `<img src="${src}" alt="${name}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="tool-icon-fb">${_svgIcon(fav, name)}</div>`;
+        }
+        return _svgIcon(fav, name);
+      }
+      function rankIconHtml(fav, name) {
+        if (LOCAL_FAVICONS.has(fav)) {
+          const src = '/favicons/' + fav + '.png';
+          return `<img src="${src}" alt="${name}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="rank-logo-fb">${_svgIcon(fav, name)}</div>`;
+        }
+        return _svgIcon(fav, name);
+      }
+
+      const extIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>`;
+      const arrIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+
+      function rankClass(r) { return r===1?'gold':r===2?'silver':r===3?'bronze':''; }
+      function medal(r)     { return r===1?'🥇':r===2?'🥈':r===3?'🥉':r; }
+
+      /* ════════════════════════════════════════
+         RENDER · BLOGGERS
+      ════════════════════════════════════════ */
+      const bloggerGrid = document.getElementById('blogger-grid');
+      const extIconSm = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>`;
+      bloggerGrid.innerHTML = BLOGGERS.map((b, i) => `
+        <article class="blogger-card si" style="transition-delay:${i * 60}ms">
+          <div class="blogger-top">
+            <div class="blogger-avatar" style="border-color:${b.color}44;position:relative;">
+              <span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(135deg,${b.color}33,${b.color}11);font-size:1.25rem;font-weight:800;color:${b.color};">${b.initial}</span>
+              ${b.avatar ? `<img src="${b.avatar}" alt="${b.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;opacity:0;transition:opacity 0.4s" onload="this.style.opacity='1'">` : ''}
+            </div>
+            <div>
+              <div class="blogger-name">${b.name}</div>
+              <div class="blogger-platform-tags">
+                ${b.platforms.map(p => `<span class="blogger-platform">${p}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+          <p class="blogger-desc">${b.desc}</p>
+          <a class="blogger-link" href="${b.url}" target="_blank" rel="noopener">
+            ${b.linkText} ${extIconSm}
+          </a>
+        </article>`
+      ).join('');
+
+      /* ════════════════════════════════════════
+         RENDER · TOOL TABS
+      ════════════════════════════════════════ */
+      const tabsEl = document.getElementById('tool-tabs');
+      CATS.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn' + (cat === '全部' ? ' active' : '');
+        btn.textContent = cat;
+        btn.dataset.cat = cat;
+        tabsEl.appendChild(btn);
+      });
+
+      /* ════════════════════════════════════════
+         RENDER · TOOL CARDS
+      ════════════════════════════════════════ */
+      const toolGrid = document.getElementById('tool-grid');
+      toolGrid.innerHTML = TOOLS.map((t, i) => `
+        <a class="tool-card si" href="${t.url}" target="_blank" rel="noopener"
+           data-cat="${t.cat}" style="transition-delay:${i*25}ms">
+          <div class="tool-card-top">
+            <div class="tool-icon-wrap">
+              ${iconHtml(t.fav, t.name)}
+            </div>
+            <div>
+              <div class="tool-name">${t.name}</div>
+              <span class="tool-cat">${t.cat}</span>
+            </div>
+          </div>
+          <div class="tool-desc">${t.desc}</div>
+          <span class="tool-link">访问工具 ${extIcon}</span>
+        </a>`
+      ).join('');
+
+      /* ════════════════════════════════════════
+         TAB FILTERING
+      ════════════════════════════════════════ */
+      tabsEl.addEventListener('click', e => {
+        const btn = e.target.closest('.tab-btn');
+        if (!btn) return;
+        tabsEl.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+        toolGrid.querySelectorAll('.tool-card').forEach(card => {
+          const match = cat === '全部' || card.dataset.cat === cat;
+          card.classList.toggle('hidden', !match);
+        });
+      });
+
+      /* ════════════════════════════════════════
+         RENDER · RANKING LIST
+      ════════════════════════════════════════ */
+      const rankList = document.getElementById('rank-list');
+      rankList.innerHTML = RANK.map(r => `
+        <a class="rank-item si" href="${r.url}" target="_blank" rel="noopener"
+           style="transition-delay:${r.rank*30}ms">
+          <div class="rank-num ${rankClass(r.rank)}">${medal(r.rank)}</div>
+          <div class="rank-logo">
+            ${rankIconHtml(r.fav, r.name)}
+          </div>
+          <div class="rank-info">
+            <div class="rank-name-row">
+              <span class="rank-name">${r.name}</span>
+              <span class="rank-tag">${r.tag}</span>
+            </div>
+            <div class="rank-desc">${r.desc}</div>
+          </div>
+          <div class="rank-metric${r.growth ? ' growth' : ''}">${r.metric}</div>
+          <div class="rank-arr">${arrIcon}</div>
+        </a>`
+      ).join('');
+
+      /* ════════════════════════════════════════
+         ANIMATIONS
+      ════════════════════════════════════════ */
+      const revObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); }
+        });
+      }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+      /* Stagger cards and list items when their container enters view */
+      const siObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.querySelectorAll('.si').forEach(el => el.classList.add('in'));
+            siObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.04 });
+      document.querySelectorAll('#tools, #ranking, #creators').forEach(sec => siObs.observe(sec));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,759 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>个人爱好（F1） | Starry</title>
+    <meta name="description" content="Starry 的 F1 个人爱好模块，2026 赛季车手与车队实时积分、完整车手阵容介绍。" />
+    <meta property="og:title" content="个人爱好（F1） | Starry" />
+    <meta property="og:locale" content="zh_CN" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
+    <style>
+      /* ── Variables ── */
+      :root {
+        --bg:       #000000;
+        --s1:       #101010;
+        --s2:       #181818;
+        --s3:       #212121;
+        --line:     rgba(255,255,255,0.08);
+        --line2:    rgba(255,255,255,0.14);
+        --text:     #e1e0cc;
+        --muted:    rgba(225,224,204,0.68);
+        --dim:      rgba(225,224,204,0.42);
+        --primary:  #dedbc8;
+        --yellow:   #dfff00;
+      }
+
+      * { box-sizing: border-box; font-family: 'Almarai', -apple-system, sans-serif; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0; min-width: 320px;
+        background: var(--bg); color: var(--text);
+        background-image:
+          radial-gradient(circle at top left,  rgba(255,255,255,0.04), transparent 30%),
+          radial-gradient(circle at bottom right, rgba(255,255,255,0.03), transparent 26%);
+      }
+      a { color: inherit; text-decoration: none; }
+
+      /* ── Layout ── */
+      .page {
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 80px;
+      }
+
+      /* ── Nav ── */
+      .nav {
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 16px;
+        margin-bottom: 28px;
+      }
+      .brand {
+        font-size: 0.88rem; letter-spacing: 0.26em;
+        text-transform: uppercase; color: var(--primary);
+      }
+      .back-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px;
+        color: var(--muted); font-size: 0.82rem;
+        transition: color .25s, border-color .25s, transform .25s;
+      }
+      .back-btn:hover { color: var(--text); border-color: var(--line2); transform: translateY(-2px); }
+
+      /* ── Hero ── */
+      .hero {
+        border: 1px solid var(--line); border-radius: 32px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+        padding: 36px 32px;
+      }
+      .eyebrow {
+        margin: 0; font-size: 0.72rem; letter-spacing: 0.24em;
+        text-transform: uppercase; color: var(--dim);
+      }
+      .hero-title {
+        margin: 16px 0 0;
+        font-size: clamp(3rem, 8vw, 7rem);
+        line-height: 0.92; letter-spacing: -0.06em;
+      }
+      .hero-title em {
+        font-family: 'Instrument Serif', serif; font-style: italic;
+        font-weight: 400; color: rgba(225,224,204,0.55);
+      }
+      .hero-copy {
+        max-width: 680px; margin: 22px 0 0;
+        color: var(--muted); font-size: 0.98rem; line-height: 1.8;
+      }
+      .hero-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+      .htag {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px;
+        font-size: 0.76rem; color: var(--dim);
+      }
+      .htag-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: var(--yellow);
+        animation: blink 2s ease infinite;
+      }
+      @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+      /* ── Section wrapper ── */
+      .section {
+        margin-top: 16px; border: 1px solid var(--line);
+        border-radius: 28px; background: var(--s1); padding: 28px;
+      }
+      .sec-head {
+        display: flex; align-items: flex-end;
+        justify-content: space-between; gap: 12px; flex-wrap: wrap;
+        margin-bottom: 22px;
+      }
+      .sec-eyebrow {
+        margin: 0 0 7px; font-size: 0.7rem; letter-spacing: 0.24em;
+        text-transform: uppercase; color: var(--dim);
+      }
+      .sec-title {
+        margin: 0; font-size: clamp(1.5rem, 3.5vw, 2.4rem); line-height: 1;
+      }
+      .sec-round {
+        font-size: 0.72rem; color: var(--dim); white-space: nowrap; align-self: flex-end;
+      }
+
+      /* ── Standings Table ── */
+      .tbl { width: 100%; border-collapse: collapse; }
+      .tbl th {
+        padding: 9px 14px; text-align: left; font-size: 0.68rem;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--dim); border-bottom: 1px solid var(--line);
+        font-weight: 400;
+      }
+      .tbl th.r { text-align: right; }
+      .tbl td { padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+      .tbl tbody tr:last-child td { border-bottom: none; }
+      .tbl tbody tr { transition: background .18s; }
+      .tbl tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+      .t-rank { width: 42px; font-size: 0.82rem; font-weight: 700; color: var(--dim); }
+      .t-rank.gold   { color: #FFD700; }
+      .t-rank.silver { color: #C0C0C0; }
+      .t-rank.bronze { color: #CD7F32; }
+
+      .driver-cell { display: flex; align-items: center; gap: 10px; }
+      .d-bar { width: 3px; height: 36px; border-radius: 2px; flex-shrink: 0; }
+      /* driver thumbnail */
+      .d-thumb-wrap {
+        width: 40px; height: 52px; border-radius: 8px;
+        overflow: hidden; flex-shrink: 0;
+        background: rgba(255,255,255,0.04);
+      }
+      .d-thumb {
+        width: 100%; height: 100%;
+        object-fit: cover; object-position: top center;
+      }
+      /* bilingual names */
+      .d-name-zh { font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1.2; }
+      .d-name-en { font-size: 0.68rem; color: var(--dim); letter-spacing: 0.04em; margin-top: 1px; }
+      .d-sub  { font-size: 0.66rem; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; opacity: .7; }
+      /* bilingual team names */
+      .t-team-cn { display: block; font-size: 0.88rem; color: var(--text); }
+      .t-team-en { display: block; font-size: 0.66rem; color: var(--dim); margin-top: 2px; letter-spacing: 0.06em; }
+
+      .t-team  { color: var(--muted); font-size: 0.86rem; }
+      .t-nat   { font-size: 0.84rem; color: var(--muted); white-space: nowrap; }
+      .t-pts   { text-align: right; font-weight: 700; font-size: 1rem; color: var(--text); }
+
+      .con-cell  { display: flex; align-items: center; gap: 12px; }
+      .con-badge {
+        flex-shrink: 0;
+        width: 58px; height: 34px; border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        padding: 5px 9px; overflow: hidden;
+        font-size: 0.55rem; font-weight: 800; letter-spacing: 0.04em;
+        color: rgba(255,255,255,0.8); text-transform: uppercase;
+      }
+      .con-badge img {
+        width: auto; height: 18px;
+        max-width: 100%;
+        object-fit: contain;
+        display: block;
+      }
+      .con-name { font-size: 0.94rem; color: var(--text); }
+
+      /* ── Skeleton ── */
+      @keyframes shimmer {
+        from { background-position: -200% 0; }
+        to   { background-position:  200% 0; }
+      }
+      .sk {
+        background: linear-gradient(90deg,#161616 25%,#222 50%,#161616 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 5px;
+      }
+      .sk-row td { padding: 13px 14px; }
+
+      /* ── Error / Empty ── */
+      .state-box {
+        padding: 48px 24px; text-align: center;
+        border: 1px dashed var(--line); border-radius: 18px; color: var(--dim);
+      }
+      .state-box svg { display: block; margin: 0 auto 14px; width: 36px; height: 36px; opacity: .4; }
+      .state-box p { margin: 0 0 4px; font-size: .9rem; }
+      .state-box small { font-size: .75rem; color: rgba(255,255,255,.18); }
+
+      /* ── Driver Cards Grid ── */
+      .driver-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      /* F1-style landscape card */
+      .dcard {
+        position: relative; overflow: hidden;
+        border-radius: 20px; height: 220px;
+        display: flex;
+        transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
+      }
+      .dcard:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+      .dcard-stripe { position: absolute; top:0; left:0; right:0; height:3px; z-index:3; border-radius:20px 20px 0 0; }
+      /* Left info panel */
+      .dcard-left {
+        position: relative; z-index:2;
+        flex: 0 0 45%; padding: 16px;
+        display: flex; flex-direction: column; justify-content: space-between;
+        overflow: hidden;
+      }
+      .dcard-num-bg {
+        position: absolute; top:-8px; left:-4px;
+        font-size: 6.5rem; font-weight:900; line-height:1; letter-spacing:-0.05em;
+        color: rgba(255,255,255,0.07); pointer-events:none; user-select:none;
+      }
+      .dcard-top-info { position: relative; z-index:1; }
+      .dcard-num-badge {
+        display: inline-block; padding: 2px 9px; border-radius: 5px;
+        font-size: 0.72rem; font-weight:700; letter-spacing: 0.06em;
+        background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.9);
+      }
+      .dcard-bottom-info { position: relative; z-index:1; }
+      .dcard-name-zh { font-size:1.1rem; font-weight:700; color:#fff; line-height:1.2; margin-bottom:2px; }
+      .dcard-name-en { font-size:0.66rem; color:rgba(255,255,255,0.4); letter-spacing:0.06em; margin-bottom:8px; }
+      .dcard-team-lbl { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:3px; }
+      .dcard-nat-lbl  { font-size:0.75rem; color:rgba(255,255,255,0.65); display:flex; align-items:center; gap:5px; }
+      /* Right photo panel */
+      .dcard-right { flex:1; position:relative; overflow:hidden; }
+      .dcard-photo {
+        position:absolute; top:0; left:50%;
+        transform:translateX(-50%);
+        height:100%; width:auto;
+        filter: drop-shadow(-4px 0 10px rgba(0,0,0,0.5));
+      }
+      .dcard-photo-fb {
+        position:absolute; inset:0; display:none;
+        align-items:center; justify-content:center;
+      }
+      .dcard-initials {
+        font-size:2.4rem; font-weight:900; letter-spacing:-0.04em;
+        color:rgba(255,255,255,0.08);
+      }
+
+      /* ── Reveal / Stagger Animations ── */
+      .reveal {
+        opacity: 0; transform: translateY(26px);
+        transition: opacity .65s cubic-bezier(.22,1,.36,1),
+                    transform .65s cubic-bezier(.22,1,.36,1);
+      }
+      .reveal.in { opacity: 1; transform: translateY(0); }
+
+      .si {
+        opacity: 0; transform: scale(.96) translateY(14px);
+        transition: opacity .55s cubic-bezier(.22,1,.36,1),
+                    transform .55s cubic-bezier(.22,1,.36,1);
+      }
+      .si.in { opacity: 1; transform: scale(1) translateY(0); }
+
+      .sr {
+        opacity: 0; transform: translateX(-8px);
+        transition: opacity .45s cubic-bezier(.22,1,.36,1),
+                    transform .45s cubic-bezier(.22,1,.36,1);
+      }
+      .sr.in { opacity: 1; transform: translateX(0); }
+
+      /* ── Footer ── */
+      .site-footer { border-top: 1px solid var(--line); padding: 28px 0; }
+      .footer-inner {
+        width: min(1200px, calc(100% - 32px)); margin: 0 auto;
+        display: flex; flex-direction: column; gap: 10px;
+      }
+      @media (min-width: 640px) {
+        .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; }
+      }
+      .ft-brand { margin: 0; font-size: .7rem; letter-spacing: .26em; text-transform: uppercase; color: var(--dim); }
+      .ft-sub   { margin: 4px 0 0; font-size: .73rem; color: rgba(255,255,255,.16); }
+      .ft-copy  { margin: 0; font-size: .73rem; color: rgba(255,255,255,.16); }
+
+      /* ── Responsive ── */
+      @media (max-width: 900px) {
+        .tbl .hide-md { display: none; }
+      }
+      @media (max-width: 640px) {
+        .page { width: min(100% - 20px, 1200px); padding-top: 16px; }
+        .hero { padding: 22px 20px; border-radius: 26px; }
+        .section { padding: 20px 18px; border-radius: 22px; }
+        .driver-grid { grid-template-columns: 1fr; gap: 10px; }
+        .dcard { height: 185px; }
+        .dcard-left { flex: 0 0 48%; padding: 12px; }
+        .dcard-num-bg { font-size: 5rem; }
+        .dcard-name-zh { font-size: 0.95rem; }
+        .tbl .hide-sm { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="page">
+
+      <!-- ── Nav ── -->
+      <div class="nav">
+        <span class="brand">F1 MODULE</span>
+        <a class="back-btn" href="/">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          返回首页
+        </a>
+      </div>
+
+      <!-- ── Hero ── -->
+      <section class="hero reveal">
+        <p class="eyebrow">PERSONAL HOBBY / F1 · 2026 SEASON</p>
+        <h1 class="hero-title">2026 赛季 <em>数据中心</em></h1>
+        <p class="hero-copy">
+          车手积分榜与车队积分榜实时获取自 Jolpica F1 API，完整赛季车手阵容静态展示。
+        </p>
+        <div class="hero-tags">
+          <span class="htag"><span class="htag-dot"></span>实时数据 · 2026</span>
+          <span class="htag">22 位车手 · 11 支车队</span>
+          <span class="htag">Jolpica F1 API</span>
+        </div>
+      </section>
+
+      <!-- ── Driver Standings ── -->
+      <section class="section reveal" style="transition-delay:.06s">
+        <div class="sec-head">
+          <div>
+            <p class="sec-eyebrow">DRIVER STANDINGS</p>
+            <h2 class="sec-title">车手积分榜</h2>
+          </div>
+          <span class="sec-round" id="d-round"></span>
+        </div>
+
+        <div id="d-skeleton">
+          <table class="tbl"><thead><tr>
+            <th style="width:42px">P</th><th>车手</th>
+            <th class="hide-sm">车队</th><th class="hide-md">国籍</th>
+            <th class="r">积分</th>
+          </tr></thead><tbody id="d-sk-rows"></tbody></table>
+        </div>
+        <div id="d-data" style="display:none"></div>
+        <div id="d-empty" style="display:none" class="state-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+          <p>暂无 2026 赛季数据</p><small>赛季可能尚未开始</small>
+        </div>
+        <div id="d-error" style="display:none" class="state-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <p>数据加载失败</p><small>请检查网络后刷新</small>
+        </div>
+      </section>
+
+      <!-- ── Constructor Standings ── -->
+      <section class="section reveal" style="transition-delay:.1s">
+        <div class="sec-head">
+          <div>
+            <p class="sec-eyebrow">CONSTRUCTOR STANDINGS</p>
+            <h2 class="sec-title">车队积分榜</h2>
+          </div>
+          <span class="sec-round" id="c-round"></span>
+        </div>
+
+        <div id="c-skeleton">
+          <table class="tbl"><thead><tr>
+            <th style="width:42px">P</th><th>车队</th><th class="r">积分</th>
+          </tr></thead><tbody id="c-sk-rows"></tbody></table>
+        </div>
+        <div id="c-data" style="display:none"></div>
+        <div id="c-empty" style="display:none" class="state-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+          <p>暂无 2026 赛季车队数据</p><small>赛季可能尚未开始</small>
+        </div>
+        <div id="c-error" style="display:none" class="state-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <p>数据加载失败</p><small>请检查网络后刷新</small>
+        </div>
+      </section>
+
+      <!-- ── Driver Cards ── -->
+      <section class="section reveal" style="transition-delay:.14s">
+        <div class="sec-head">
+          <div>
+            <p class="sec-eyebrow">DRIVER ROSTER</p>
+            <h2 class="sec-title">2026 赛季车手阵容</h2>
+          </div>
+        </div>
+        <div class="driver-grid" id="driver-cards"></div>
+      </section>
+
+    </div><!-- /.page -->
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <p class="ft-brand">STARRY</p>
+          <p class="ft-sub">AI Trainer · Personal Website</p>
+        </div>
+        <p class="ft-copy">© 2026 Starry · All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      /* ═══════════════════════════════════════
+         STATIC DATA
+      ═══════════════════════════════════════ */
+      const TEAM = {
+        mclaren:      { color: '#FF8000', zh: '迈凯伦' },
+        ferrari:      { color: '#DC0000', zh: '法拉利' },
+        mercedes:     { color: '#00D2BE', zh: '梅赛德斯' },
+        red_bull:     { color: '#1E41FF', zh: '红牛' },
+        williams:     { color: '#005AFF', zh: '威廉姆斯' },
+        aston_martin: { color: '#006F62', zh: '阿斯顿马丁' },
+        audi:         { color: '#E8002D', zh: '奥迪' },
+        rb:           { color: '#1565C0', zh: 'VCARB' },
+        haas:         { color: '#B6BABD', zh: '哈斯' },
+        alpine:       { color: '#FF87BC', zh: 'Alpine' },
+        cadillac:     { color: '#1A1A1A', zh: '凯迪拉克' },
+      };
+
+      const NAT = {
+        'British':       { zh: '英国',     f: '🇬🇧' },
+        'Italian':       { zh: '意大利',   f: '🇮🇹' },
+        'Monegasque':    { zh: '摩纳哥',   f: '🇲🇨' },
+        'Australian':    { zh: '澳大利亚', f: '🇦🇺' },
+        'Dutch':         { zh: '荷兰',     f: '🇳🇱' },
+        'French':        { zh: '法国',     f: '🇫🇷' },
+        'New Zealander': { zh: '新西兰',   f: '🇳🇿' },
+        'Argentine':     { zh: '阿根廷',   f: '🇦🇷' },
+        'Spanish':       { zh: '西班牙',   f: '🇪🇸' },
+        'Brazilian':     { zh: '巴西',     f: '🇧🇷' },
+        'Thai':          { zh: '泰国',     f: '🇹🇭' },
+        'German':        { zh: '德国',     f: '🇩🇪' },
+        'Finnish':       { zh: '芬兰',     f: '🇫🇮' },
+        'Mexican':       { zh: '墨西哥',   f: '🇲🇽' },
+        'Canadian':      { zh: '加拿大',   f: '🇨🇦' },
+        'Swedish':       { zh: '瑞典',     f: '🇸🇪' },
+      };
+
+      /* 2026 season CDN — Cloudinary fallback handles missing driver images automatically */
+      const IMG_BASE   = 'https://media.formula1.com/image/upload/c_lfill,w_440/q_auto/d_common:f1:2026:fallback:driver:2026fallbackdriverright.webp/v1740000001/common/f1/2026/';
+      const THUMB_BASE = 'https://media.formula1.com/image/upload/c_lfill,w_80/q_auto/d_common:f1:2026:fallback:driver:2026fallbackdriverright.webp/v1740000001/common/f1/2026/';
+      const DRIVERS = [
+        { zh:'诺里斯',    en:'Norris',     num:'1',  nat:'英国',     f:'🇬🇧', tid:'mclaren',      img:'mclaren/lannor01/2026mclarenlannor01right.webp'                       },
+        { zh:'皮亚斯特里',en:'Piastri',    num:'81', nat:'澳大利亚', f:'🇦🇺', tid:'mclaren',      img:'mclaren/oscpia01/2026mclarenoscpia01right.webp'                       },
+        { zh:'勒克莱尔', en:'Leclerc',     num:'16', nat:'摩纳哥',   f:'🇲🇨', tid:'ferrari',      img:'ferrari/chalec01/2026ferrarichalec01right.webp'                       },
+        { zh:'汉密尔顿', en:'Hamilton',    num:'44', nat:'英国',     f:'🇬🇧', tid:'ferrari',      img:'ferrari/lewham01/2026ferrarilewham01right.webp'                       },
+        { zh:'拉塞尔',   en:'Russell',     num:'63', nat:'英国',     f:'🇬🇧', tid:'mercedes',     img:'mercedes/georus01/2026mercedesgeorus01right.webp'                     },
+        { zh:'安东内利', en:'Antonelli',   num:'12', nat:'意大利',   f:'🇮🇹', tid:'mercedes',     img:'mercedes/andant01/2026mercedesandant01right.webp'                     },
+        { zh:'维斯塔潘', en:'Verstappen',  num:'33', nat:'荷兰',     f:'🇳🇱', tid:'red_bull',     img:'redbullracing/maxver01/2026redbullracingmaxver01right.webp'           },
+        { zh:'哈贾尔',   en:'Hadjar',      num:'6',  nat:'法国',     f:'🇫🇷', tid:'red_bull',     img:'redbullracing/isahad01/2026redbullracingisahad01right.webp'           },
+        { zh:'阿尔本',   en:'Albon',       num:'23', nat:'泰国',     f:'🇹🇭', tid:'williams',     img:'williams/alealb01/2026williamsalealb01right.webp'                     },
+        { zh:'塞恩斯',   en:'Sainz',       num:'55', nat:'西班牙',   f:'🇪🇸', tid:'williams',     img:'williams/carsai01/2026williamscarsai01right.webp'                     },
+        { zh:'阿隆索',   en:'Alonso',      num:'14', nat:'西班牙',   f:'🇪🇸', tid:'aston_martin', img:'astonmartin/feralo01/2026astonmartinferalo01right.webp'               },
+        { zh:'斯特罗尔', en:'Stroll',      num:'18', nat:'加拿大',   f:'🇨🇦', tid:'aston_martin', img:'astonmartin/lanstr01/2026astonmartinlanstr01right.webp'               },
+        { zh:'霍肯伯格', en:'Hülkenberg',  num:'27', nat:'德国',     f:'🇩🇪', tid:'audi',         img:'audi/nichul01/2026audinichul01right.webp'                             },
+        { zh:'博托莱托', en:'Bortoleto',   num:'5',  nat:'巴西',     f:'🇧🇷', tid:'audi',         img:'audi/gabbor01/2026audigabbor01right.webp'                             },
+        { zh:'劳森',     en:'Lawson',      num:'30', nat:'新西兰',   f:'🇳🇿', tid:'rb',           img:'racingbulls/lialaw01/2026racingbullslialaw01right.webp'               },
+        { zh:'林德布拉德',en:'Lindblad',   num:'41', nat:'瑞典',     f:'🇸🇪', tid:'rb',           img:'racingbulls/arvlin01/2026racingbullsarvlin01right.webp'               },
+        { zh:'奥康',     en:'Ocon',        num:'31', nat:'法国',     f:'🇫🇷', tid:'haas',         img:'haas/estoco01/2026haasestoco01right.webp'                             },
+        { zh:'贝尔曼',   en:'Bearman',     num:'87', nat:'英国',     f:'🇬🇧', tid:'haas',         img:'haas/olibea01/2026haasolibea01right.webp'                             },
+        { zh:'加斯利',   en:'Gasly',       num:'10', nat:'法国',     f:'🇫🇷', tid:'alpine',       img:'alpine/piegas01/2026alpinepiegas01right.webp'                         },
+        { zh:'科拉平托', en:'Colapinto',   num:'43', nat:'阿根廷',   f:'🇦🇷', tid:'alpine',       img:'alpine/fracol01/2026alpinefracol01right.webp'                         },
+        { zh:'佩雷兹',   en:'Pérez',       num:'11', nat:'墨西哥',   f:'🇲🇽', tid:'cadillac',     img:'cadillac/serper01/2026cadillacserper01right.webp'                     },
+        { zh:'博塔斯',   en:'Bottas',      num:'77', nat:'芬兰',     f:'🇫🇮', tid:'cadillac',     img:'cadillac/valbot01/2026cadillacvalbot01right.webp'                     },
+      ];
+
+      /* lookup by normalised last name (strips diacritics, lowercases) */
+      function normName(s) { return (s||'').toLowerCase().replace(/ü/g,'u').replace(/é/g,'e').replace(/á/g,'a').replace(/ó/g,'o'); }
+      const DRIVER_MAP = Object.fromEntries(DRIVERS.map(d => [normName(d.en), d]));
+
+      /* ═══════════════════════════════════════
+         HELPERS
+      ═══════════════════════════════════════ */
+      function esc(s) {
+        return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+      function teamColor(id) {
+        const k = (id||'').toLowerCase().replace(/[^a-z_]/g,'');
+        return (TEAM[k] || {}).color || '#888';
+      }
+      const CON_FOLDER = {
+        mclaren:      'mclaren',
+        ferrari:      'ferrari',
+        mercedes:     'mercedes',
+        red_bull:     'redbullracing',
+        williams:     'williams',
+        aston_martin: 'astonmartin',
+        aston:        'astonmartin',
+        alpine:       'alpine',
+        rb:           'racingbulls',
+        racing_bulls: 'racingbulls',
+        haas:         'haasf1team',
+        audi:         'audi',
+        sauber:       'audi',
+        cadillac:     'cadillac',
+        andretti:     'cadillac',
+      };
+      const LOGO_BASE = 'https://media.formula1.com/image/upload/c_lfill,w_96/q_auto/v1740000001/common/f1/2026/';
+
+      function teamBadge(id) {
+        const k = (id||'').toLowerCase().replace(/[^a-z_]/g,'');
+        const folder = CON_FOLDER[k];
+        if (!folder) return '';
+        const src = `${LOGO_BASE}${folder}/2026${folder}logowhite.webp`;
+        return `<img src="${src}" alt="" onerror="this.parentElement.textContent='${k.slice(0,3).toUpperCase()}'">`;
+      }
+      function natInfo(api) {
+        return NAT[api] || { zh: api, f: '🏁' };
+      }
+      function rankClass(p) {
+        return p===1?'gold':p===2?'silver':p===3?'bronze':'';
+      }
+      function medal(p) {
+        return p===1?'🥇':p===2?'🥈':p===3?'🥉':p;
+      }
+      function show(id){ document.getElementById(id).style.display=''; }
+      function hide(id){ document.getElementById(id).style.display='none'; }
+
+      /* ═══════════════════════════════════════
+         SKELETONS
+      ═══════════════════════════════════════ */
+      function skRow(cols) {
+        return `<tr class="sk-row">${cols.map(w=>`<td><div class="sk" style="height:13px;width:${w};border-radius:4px"></div></td>`).join('')}</tr>`;
+      }
+      document.getElementById('d-sk-rows').innerHTML =
+        Array.from({length:10}).map(()=>skRow(['28px','160px','110px','80px','52px'])).join('');
+      document.getElementById('c-sk-rows').innerHTML =
+        Array.from({length:11}).map(()=>skRow(['28px','180px','60px'])).join('');
+
+      /* ═══════════════════════════════════════
+         RENDER: DRIVER STANDINGS
+      ═══════════════════════════════════════ */
+      function renderDriverTable(list) {
+        const tbl = document.createElement('table');
+        tbl.className = 'tbl';
+        tbl.innerHTML = `
+          <thead><tr>
+            <th style="width:42px">P</th>
+            <th>车手</th>
+            <th class="hide-sm">车队</th>
+            <th class="hide-md">国籍</th>
+            <th class="r">积分</th>
+          </tr></thead>
+          <tbody>
+          ${list.map((s,i)=>{
+            const d = s.Driver;
+            const c = (s.Constructors||[])[0]||{};
+            const col = teamColor(c.constructorId);
+            const nat = natInfo(d.nationality);
+            const p = +s.position;
+            const dInfo = DRIVER_MAP[normName(d.familyName)] || {};
+            const thumbSrc = dInfo.img ? THUMB_BASE + dInfo.img : '';
+            const zhName  = dInfo.zh  || '';
+            const cid     = (c.constructorId||'').toLowerCase().replace(/[^a-z_]/g,'');
+            const zhTeam  = (TEAM[cid] || {}).zh || '';
+            return `<tr class="sr" style="transition-delay:${i*35}ms">
+              <td class="t-rank ${rankClass(p)}">${medal(p)}</td>
+              <td><div class="driver-cell">
+                ${thumbSrc ? `<div class="d-thumb-wrap"><img class="d-thumb" src="${thumbSrc}" alt=""></div>` : ''}
+                <div class="d-bar" style="background:${col}"></div>
+                <div>
+                  ${zhName ? `<div class="d-name-zh">${esc(zhName)}</div>` : ''}
+                  <div class="d-name-en">${esc(d.givenName)} ${esc(d.familyName)}</div>
+                  <div class="d-sub">${esc(d.code||'')} · #${esc(d.permanentNumber||'')}</div>
+                </div>
+              </div></td>
+              <td class="t-team hide-sm">
+                ${zhTeam ? `<span class="t-team-cn">${esc(zhTeam)}</span>` : ''}
+                <span class="t-team-en">${esc(c.name||'–')}</span>
+              </td>
+              <td class="t-nat hide-md">${nat.f} ${esc(nat.zh)}</td>
+              <td class="t-pts">${esc(s.points)}</td>
+            </tr>`;
+          }).join('')}
+          </tbody>`;
+        return tbl;
+      }
+
+      /* ═══════════════════════════════════════
+         RENDER: CONSTRUCTOR STANDINGS
+      ═══════════════════════════════════════ */
+      function renderConTable(list) {
+        const tbl = document.createElement('table');
+        tbl.className = 'tbl';
+        tbl.innerHTML = `
+          <thead><tr>
+            <th style="width:42px">P</th>
+            <th>车队</th>
+            <th class="r">积分</th>
+          </tr></thead>
+          <tbody>
+          ${list.map((s,i)=>{
+            const c = s.Constructor||{};
+            const col = teamColor(c.constructorId);
+            const abbr = (c.name||'').split(' ').map(w=>w[0]).join('').slice(0,3).toUpperCase();
+            const badge = teamBadge(c.constructorId) || esc(abbr);
+            const zhName = (TEAM[(c.constructorId||'').toLowerCase().replace(/[^a-z_]/g,'')] || {}).zh || esc(c.name);
+            const p = +s.position;
+            return `<tr class="sr" style="transition-delay:${i*40}ms">
+              <td class="t-rank ${rankClass(p)}">${medal(p)}</td>
+              <td><div class="con-cell">
+                <div class="con-badge" style="background:${col}">${badge}</div>
+                <span class="con-name">${esc(zhName)}</span>
+              </div></td>
+              <td class="t-pts">${esc(s.points)}</td>
+            </tr>`;
+          }).join('')}
+          </tbody>`;
+        return tbl;
+      }
+
+      /* ═══════════════════════════════════════
+         RENDER: STATIC DRIVER CARDS
+      ═══════════════════════════════════════ */
+      function renderDriverCards() {
+        const grid = document.getElementById('driver-cards');
+        grid.innerHTML = DRIVERS.map((d, i) => {
+          const t = TEAM[d.tid] || { color: '#444', zh: d.tid };
+          const col = t.color;
+          const r = parseInt(col.slice(1,3), 16);
+          const g = parseInt(col.slice(3,5), 16);
+          const b = parseInt(col.slice(5,7), 16);
+          const bg = `linear-gradient(135deg,rgba(${r},${g},${b},.42) 0%,rgba(${r},${g},${b},.16) 38%,rgba(6,6,6,.97) 72%)`;
+          const initials = d.en.slice(0,3).toUpperCase();
+          return `
+          <article class="dcard si" style="background:${bg};transition-delay:${i*38}ms">
+            <div class="dcard-stripe" style="background:${col}"></div>
+            <div class="dcard-left">
+              <div class="dcard-num-bg">${d.num}</div>
+              <div class="dcard-top-info">
+                <span class="dcard-num-badge">#${d.num}</span>
+              </div>
+              <div class="dcard-bottom-info">
+                <div class="dcard-name-zh">${d.zh}</div>
+                <div class="dcard-name-en">${d.en}</div>
+                <div class="dcard-team-lbl">${t.zh}</div>
+                <div class="dcard-nat-lbl">${d.f} <span>${d.nat}</span></div>
+              </div>
+            </div>
+            <div class="dcard-right">
+              <img class="dcard-photo" src="${IMG_BASE}${d.img}" alt="${d.zh}"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="dcard-photo-fb">
+                <span class="dcard-initials">${initials}</span>
+              </div>
+            </div>
+          </article>`;
+        }).join('');
+      }
+
+      /* ═══════════════════════════════════════
+         FETCH API DATA
+      ═══════════════════════════════════════ */
+      async function loadStandings() {
+        const BASE = 'https://api.jolpi.ca/ergast/f1/2026';
+
+        /* Driver */
+        try {
+          const r = await fetch(`${BASE}/driverStandings/`);
+          if (!r.ok) throw new Error();
+          const j = await r.json();
+          const lists = j?.MRData?.StandingsTable?.StandingsLists || [];
+          const rows  = lists[0]?.DriverStandings || [];
+          hide('d-skeleton');
+          if (!rows.length) { show('d-empty'); }
+          else {
+            const el = document.getElementById('d-data');
+            el.appendChild(renderDriverTable(rows));
+            show('d-data');
+            const round = lists[0]?.round;
+            if (round) document.getElementById('d-round').textContent = `第 ${round} 轮`;
+            requestAnimationFrame(() => staggerIn(el.querySelector('tbody')));
+          }
+        } catch {
+          hide('d-skeleton'); show('d-error');
+        }
+
+        /* Constructor */
+        try {
+          const r = await fetch(`${BASE}/constructorStandings/`);
+          if (!r.ok) throw new Error();
+          const j = await r.json();
+          const lists = j?.MRData?.StandingsTable?.StandingsLists || [];
+          const rows  = lists[0]?.ConstructorStandings || [];
+          hide('c-skeleton');
+          if (!rows.length) { show('c-empty'); }
+          else {
+            const el = document.getElementById('c-data');
+            el.appendChild(renderConTable(rows));
+            show('c-data');
+            const round = lists[0]?.round;
+            if (round) document.getElementById('c-round').textContent = `第 ${round} 轮`;
+            requestAnimationFrame(() => staggerIn(el.querySelector('tbody')));
+          }
+        } catch {
+          hide('c-skeleton'); show('c-error');
+        }
+      }
+
+      /* ═══════════════════════════════════════
+         ANIMATIONS
+      ═══════════════════════════════════════ */
+      /* Sections fade-in on scroll */
+      const revObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); }
+        });
+      }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+      /* Stagger table rows (.sr) when tbody enters view */
+      function staggerIn(tbody) {
+        if (!tbody) return;
+        const obs = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.querySelectorAll('.sr').forEach(row => row.classList.add('in'));
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.05 });
+        obs.observe(tbody);
+      }
+
+      /* Stagger driver cards (.si) when grid enters view */
+      const cardObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.querySelectorAll('.si').forEach(c => c.classList.add('in'));
+            cardObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.04 });
+
+      /* ═══════════════════════════════════════
+         INIT
+      ═══════════════════════════════════════ */
+      renderDriverCards();
+      cardObs.observe(document.getElementById('driver-cards'));
+      loadStandings();
+    </script>
+  </body>
+</html>
