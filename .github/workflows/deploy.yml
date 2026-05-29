@@ -10,6 +10,7 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v3
 
@@ -22,12 +23,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Restore dev entry for build
+        run: cp vite-source.html index.html
+
       - name: Build
         run: npm run build
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          cname: pengjianai.com
+      - name: Update root with built output
+        run: |
+          cp dist/index.html index.html
+          rm -rf assets
+          cp -r dist/assets assets
+
+      - name: Commit built files
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add index.html assets/
+          git diff --staged --quiet || git commit -m "ci: update built assets [skip ci]"
+          git push

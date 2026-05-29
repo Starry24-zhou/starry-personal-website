@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Starry 的 AI 训练师个人网站，展示 AI 作品、F1 爱好、渲染集与个人简历。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Starry | AI训练师个人网站" />
+    <meta property="og:description" content="Starry 的 AI 训练师个人网站，展示 AI 作品、F1 爱好、渲染集与个人简历。" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Starry | AI训练师个人网站" />
+    <meta name="twitter:description" content="Starry 的 AI 训练师个人网站，展示 AI 作品、F1 爱好、渲染集与个人简历。" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" crossorigin />
+    <link rel="dns-prefetch" href="https://d8j0ntlcm91z4.cloudfront.net" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap"
+      rel="stylesheet"
+    />
+    <title>Starry | AI训练师个人网站</title>
+    <script type="module" src="/src/main.tsx"></script>
+    <style>
+      #dify-chatbot-bubble-button {
+        background-color: #1C64F2 !important;
+        position: fixed !important;
+        bottom: 2rem !important;
+        right: 2rem !important;
+        z-index: 9999 !important;
+      }
+      #dify-chatbot-bubble-window {
+        width: 24rem !important;
+        height: 40rem !important;
+        position: fixed !important;
+        bottom: 5rem !important;
+        right: 2rem !important;
+        z-index: 9998 !important;
+      }
+      @media (max-width: 640px) {
+        #dify-chatbot-bubble-window {
+          width: auto !important;
+          left: 0.75rem !important;
+          right: 0.75rem !important;
+          height: 70vh !important;
+          bottom: 4.5rem !important;
+        }
+      }
+    </style>
+    <script>
+      document.addEventListener('touchstart', function () {
+        document.querySelectorAll('video[autoplay]').forEach(function (v) {
+          v.play().catch(function () {});
+        });
+      }, { once: true });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <style>
+    .snake-game-entry{margin-top:2rem;padding:0 2rem}
+    .snake-game-link{display:grid;grid-template-columns:200px 1fr;background-color:#242d22;border:1px solid #3a4635;border-radius:8px;overflow:hidden;text-decoration:none;color:#f2f5eb;transition:border-color .3s,transform .3s,box-shadow .3s}
+    .snake-game-link:hover{border-color:#f2f5eb;transform:translateY(-4px);box-shadow:4px 4px 0 #f2f5eb}
+    .snake-game-preview{position:relative;background:linear-gradient(160deg,#0c1628,#0a1020 50%,#061318);display:flex;align-items:center;justify-content:center;min-height:160px}
+    .snake-game-preview .badge{position:absolute;top:12px;left:12px;z-index:2}
+    .snake-game-visual{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#00ffaa,#00bb77 40%,#009966 70%,transparent 75%);box-shadow:0 0 40px rgba(0,230,160,.4),0 0 80px rgba(0,230,160,.15);animation:sgp 2.5s ease-in-out infinite}
+    @keyframes sgp{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+    .snake-game-info{padding:2rem;display:flex;flex-direction:column;justify-content:center}
+    .snake-game-info h3{font-family:'Oswald','Noto Sans SC',sans-serif;font-size:1.75rem;text-transform:uppercase;margin-bottom:.5rem}
+    .snake-game-info p{color:#c2ccb8;font-size:.95rem;margin-bottom:1.25rem;line-height:1.5}
+    .snake-game-cta{font-family:'Oswald','Noto Sans SC',sans-serif;font-weight:700;font-size:1rem;text-transform:uppercase;color:#DFFF00;letter-spacing:.05em;transition:letter-spacing .2s}
+    .snake-game-link:hover .snake-game-cta{letter-spacing:.15em}
+    @media(max-width:768px){.snake-game-link{grid-template-columns:1fr}.snake-game-preview{min-height:120px}.snake-game-visual{width:60px;height:60px}}
+    </style>
+    <script>
+    (function(){
+    function tryInsert(){
+    if(document.getElementById('snake-game-entry'))return true;
+    var section=null;
+    var s1=document.getElementById('portfolio');
+    if(s1)section=s1.closest?document.getElementById('portfolio'):s1;
+    if(!section){var t=document.querySelector('[data-i18n="portfolioTitle"]');if(t)section=t.closest('section');}
+    if(!section){var t2=document.querySelector('[data-i18n="portfolioLine1"]');if(t2)section=t2.closest('section');}
+    if(!section){var all=document.querySelectorAll('section');for(var i=0;i<all.length;i++){var txt=all[i].textContent||'';if(txt.indexOf('PORTFOLIO')>-1||txt.indexOf('作品集')>-1||txt.indexOf('AI')>-1&&txt.indexOf('MODULE')>-1){section=all[i];break;}}}
+    if(!section)return false;
+    var e=document.createElement('div');e.id='snake-game-entry';e.className='snake-game-entry';
+    e.innerHTML='<a href="snake.html" class="snake-game-link"><div class="snake-game-preview"><span class="badge">CANVAS GAME</span><div class="snake-game-visual"></div></div><div class="snake-game-info"><h3>深海贪吃蛇</h3><p>纯 Canvas 实现 · 丝滑移动 · 进化系统 · 程序化音效 · 连击 Combo</p><span class="snake-game-cta">PLAY GAME_</span></div></a>';
+    section.appendChild(e);
+    if(typeof gsap!=='undefined'&&typeof ScrollTrigger!=='undefined'){gsap.from(e,{opacity:0,y:40,duration:.8,ease:'power3.out',scrollTrigger:{trigger:e,start:'top 85%'}});}
+    return true;
+    }
+    function init(){if(!tryInsert()){var o=new MutationObserver(function(){if(tryInsert())o.disconnect()});o.observe(document.body,{childList:true,subtree:true});setTimeout(function(){o.disconnect()},30000);}}
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+    })();
+    </script>
+    <script>
+      window.difyChatbotConfig = {
+        token: 'Ys2UTbXdzNpzaC6e',
+        inputs: {
+          // You can define the inputs from the Start node here
+          // key is the variable name
+          // e.g.
+          // name: "NAME"
+        },
+        systemVariables: {
+          // user_id: 'YOU CAN DEFINE USER ID HERE',
+          // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+        },
+        userVariables: {
+          // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+          // name: 'YOU CAN DEFINE USER NAME HERE',
+        },
+      }
+    </script>
+    <script
+      src="https://udify.app/embed.min.js"
+      id="Ys2UTbXdzNpzaC6e"
+      defer>
+    </script>
+  </body>
+</html>
