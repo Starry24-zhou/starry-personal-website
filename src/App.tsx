@@ -509,7 +509,7 @@ export default function App() {
               </button>
               <p className="mb-4 text-center text-sm text-gray-400">扫描二维码添加微信</p>
               <img
-                src="/starry-personal-website/wechat-qr.png"
+                src="/wechat-qr.png"
                 alt="微信二维码"
                 className="h-56 w-56 rounded-2xl object-contain"
               />
