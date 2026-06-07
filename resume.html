@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>个人简历 | Starry</title>
-    <meta name="description" content="彭健 — AI 训练师 / 数据构建专家 个人简历" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="彭健 — 项目经理 / 数据标注全流程管理 个人简历" />
+    <link rel="icon" type="image/svg+xml" href="/starry-personal-website/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
@@ -120,27 +120,6 @@
         background: var(--yellow); border-radius: 2px; flex-shrink: 0;
       }
 
-      /* ── Project Cards ── */
-      .proj-grid { display: flex; flex-direction: column; gap: 12px; }
-      .proj-card {
-        background: var(--s2); border: 1px solid var(--line);
-        border-radius: 20px; padding: 24px 26px;
-        transition: border-color .25s, transform .25s;
-      }
-      .proj-card:hover { border-color: var(--line2); transform: translateY(-2px); }
-      .proj-title {
-        font-size: 1.02rem; font-weight: 700; color: var(--text);
-        margin: 0 0 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      }
-      .tag {
-        font-size: 0.62rem; padding: 3px 10px; border-radius: 999px;
-        border: 1px solid rgba(223,255,0,0.4);
-        color: var(--yellow); letter-spacing: 0.1em; font-weight: 400;
-      }
-      .proj-desc {
-        font-size: 0.85rem; color: var(--dim); line-height: 1.85; margin: 0;
-      }
-
       /* ── Timeline ── */
       .timeline { position: relative; padding-left: 22px; }
       .timeline::before {
@@ -180,6 +159,33 @@
         font-size: 1.1rem; line-height: 1.45;
       }
 
+      /* ── Nested Project Cards ── */
+      .nested-projs { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+      .nested-proj {
+        background: var(--s3); border: 1px solid var(--line);
+        border-radius: 16px; padding: 20px 22px;
+      }
+      .nested-proj-title {
+        font-size: 0.92rem; font-weight: 700; color: var(--text);
+        margin: 0 0 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      }
+      .nested-proj-label {
+        font-size: 0.72rem; color: var(--yellow); letter-spacing: 0.12em;
+        text-transform: uppercase; font-weight: 700; margin: 12px 0 6px;
+      }
+      .nested-proj-result {
+        font-size: 0.82rem; color: var(--muted); line-height: 1.82;
+        border-left: 2px solid rgba(223,255,0,0.35);
+        padding-left: 12px; margin: 0;
+      }
+
+      /* ── Tag ── */
+      .tag {
+        font-size: 0.62rem; padding: 3px 10px; border-radius: 999px;
+        border: 1px solid rgba(223,255,0,0.4);
+        color: var(--yellow); letter-spacing: 0.1em; font-weight: 400;
+      }
+
       /* ── Education ── */
       .edu-card {
         background: var(--s2); border: 1px solid var(--line);
@@ -204,6 +210,25 @@
       .summary-text {
         font-size: 0.88rem; color: var(--muted);
         line-height: 1.95; margin: 0;
+      }
+
+      /* ── Skills Grid ── */
+      .skills-grid { display: flex; flex-direction: column; gap: 14px; }
+      .skill-row {
+        background: var(--s2); border: 1px solid var(--line);
+        border-radius: 16px; padding: 18px 22px;
+        display: flex; gap: 16px; align-items: flex-start;
+      }
+      .skill-label {
+        font-size: 0.78rem; color: var(--yellow); letter-spacing: 0.1em;
+        text-transform: uppercase; font-weight: 700; white-space: nowrap;
+        min-width: 72px; padding-top: 2px;
+      }
+      .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+      .skill-tag {
+        font-size: 0.78rem; padding: 4px 12px; border-radius: 999px;
+        background: var(--s3); border: 1px solid var(--line);
+        color: var(--muted);
       }
 
       /* ── Back to Home ── */
@@ -255,6 +280,7 @@
         .avatar { width: 80px; height: 80px; }
         .tl-header { flex-direction: column; gap: 4px; }
         .edu-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .skill-row { flex-direction: column; gap: 10px; }
       }
     </style>
   </head>
@@ -265,7 +291,7 @@
       <!-- ── Nav ── -->
       <div class="nav">
         <span class="brand">RESUME</span>
-        <a class="back-btn" href="/">
+        <a class="back-btn" href="/starry-personal-website/">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
@@ -277,110 +303,135 @@
       <section class="hero reveal">
         <div class="hero-inner">
           <div class="hero-left">
-            <p class="eyebrow">RESUME / AI TRAINER · 2026</p>
+            <p class="eyebrow">RESUME / PROJECT MANAGER · 2026</p>
             <h1 class="hero-name">彭健</h1>
-            <p class="hero-role">AI 训练师 / 数据构建专家</p>
+            <p class="hero-role">项目经理 / 数据标注全流程管理</p>
             <div class="hero-contacts">
-              <span>📍 广东省深圳市龙岗区</span>
               <span>✉️ 2430082141@qq.com</span>
+              <span>🟢 离职，随时到岗</span>
             </div>
           </div>
           <div class="hero-right">
-            <img class="avatar" src="/IP形象.png" alt="彭健" />
+            <img class="avatar" src="/starry-personal-website/IP形象.png" alt="彭健" />
           </div>
-        </div>
-      </section>
-
-      <!-- ══════════════════════════════
-           项目经历
-      ══════════════════════════════ -->
-      <section class="section reveal" style="transition-delay:.06s">
-        <h2 class="sec-heading">项目经历</h2>
-        <div class="proj-grid">
-
-          <div class="proj-card si" style="transition-delay:0ms">
-            <div class="proj-title">
-              智能客服 SFT 项目
-              <span class="tag">SFT</span>
-            </div>
-            <p class="proj-desc">
-              主导售后智能客服高质量问答数据集构建，覆盖退货退款、物流查询、安装售后等核心业务场景；制定完整的标注规范、审核标准及质检流程，显著提升模型在复杂客服场景下的回复准确性与稳定性；独立完成从需求分析→规则制定→数据生产→质量控制→效果复盘的全链路工作。
-            </p>
-          </div>
-
-          <div class="proj-card si" style="transition-delay:80ms">
-            <div class="proj-title">
-              RAG 知识库项目
-              <span class="tag">RAG</span>
-            </div>
-            <p class="proj-desc">
-              负责企业文档的清洗、切分、去重与结构化处理，构建高质量知识库；优化知识库内容组织方式，有效提升召回效果与回答质量，推动模型知识问答能力持续提升。
-            </p>
-          </div>
-
         </div>
       </section>
 
       <!-- ══════════════════════════════
            工作经历
       ══════════════════════════════ -->
-      <section class="section reveal" style="transition-delay:.10s">
+      <section class="section reveal" style="transition-delay:.06s">
         <h2 class="sec-heading">工作经历</h2>
         <div class="timeline">
 
+          <!-- 辰知数据 -->
           <div class="timeline-item si" style="transition-delay:0ms">
             <div class="tl-header">
               <div class="tl-left">
-                <span class="tl-company">炫垚科技有限公司</span>
-                <span class="tag">AI 训练师</span>
+                <span class="tl-company">长沙辰知数据科技有限公司</span>
+                <span class="tag">项目经理</span>
               </div>
-              <span class="tl-date">2025.06 — 2026.04</span>
+              <span class="tl-date">2025.02 — 2026.04</span>
             </div>
-            <ul class="tl-list">
-              <li>主导 AI 模型训练数据全流程生产：数据采集、清洗、标注及质量审核，保障高质量数据供给</li>
-              <li>根据算法目标设计并构建 SFT、RAG 等训练数据集，支持模型持续迭代优化</li>
-              <li>建立多维度模型输出评估机制，系统分析 BadCase，提出针对性数据改进方案并落地执行</li>
-              <li>协同算法、产品及运营团队高效推进训练任务，跨部门沟通协调能力突出</li>
-            </ul>
+
+            <div class="nested-projs">
+
+              <!-- 项目一 -->
+              <div class="nested-proj">
+                <div class="nested-proj-title">
+                  短视频内容理解与推荐优化标注项目
+                  <span class="tag">内容分类</span>
+                </div>
+                <p class="nested-proj-label">项目背景</p>
+                <p class="proj-desc" style="font-size:0.83rem; color:var(--dim); line-height:1.8; margin:0 0 0;">
+                  为支撑短视频推荐算法的持续迭代，需对平台内容进行系统性分类标注。项目周期较长，内容品类持续扩张，标注体系需随产品迭代动态调整。
+                </p>
+                <p class="nested-proj-label">主要职责</p>
+                <ul class="tl-list">
+                  <li>主导制定并迭代短视频"分类 + 属性"双层标签体系，明确各级类目与多标签的打标口径、边界及互斥规则，形成可落地的标注规范</li>
+                  <li>确立多模态内容理解的判定标准，统一画面、语音转写、字幕 OCR、标题封面等多源信息的综合打标口径，重点规避"标题党、封面与内容不符"造成的误标</li>
+                  <li>推动标注产出与推荐召回 / 排序的特征需求对齐，确定核心类目的打标粒度，并设立内容质量、低质搬运、带货意图等标注维度供算法侧使用</li>
+                  <li>搭建分级质检流程，针对易混淆类目边界重点把控类目归属准确性与标注一致性</li>
+                  <li>统筹标注团队排期与日常交付节奏，对接甲方算法与产品团队跟进进度、同步标签效果反馈并迭代规范</li>
+                </ul>
+                <p class="nested-proj-label">项目成果</p>
+                <p class="nested-proj-result">
+                  项目进行至中段，甲方平台新上线"短剧"品类，临时要求当周交付数据就要包含新类目标注。当天完成规范更新与全员培训，对已产出数据进行回标评估，最终按时足量交付，质检通过率未出现明显下滑。事后推动建立类目变更预警机制，与客户约定提前同步品类调整计划，后续多次类目变更均平滑落地，响应流程沉淀为团队 SOP。
+                </p>
+              </div>
+
+              <!-- 项目二 -->
+              <div class="nested-proj">
+                <div class="nested-proj-title">
+                  智能客服大模型对话质量优化项目
+                  <span class="tag">大模型训练</span>
+                </div>
+                <p class="nested-proj-label">项目背景</p>
+                <p class="proj-desc" style="font-size:0.83rem; color:var(--dim); line-height:1.8; margin:0;">
+                  为训练智能客服大模型，需采集高质量对话训练数据。项目包含两条并行交付线：对话质量评分线与优质回复撰写线。
+                </p>
+                <p class="nested-proj-label">主要职责</p>
+                <ul class="tl-list">
+                  <li>统筹评分与撰写两条交付线，依据各自任务难度与产出速度差异分配人力、对齐节奏</li>
+                  <li>针对大模型训练对数据质量的高要求，建立差异化质检标准：评分线侧重统一打分口径，通过评分细则与分歧复盘减少标注员之间的主观偏差；撰写线把控回复的内容准确性与逻辑完整性</li>
+                  <li>主导制定评分维度与撰写规范，统一团队对"优质回复"的判定口径，定期复盘分歧 case 并迭代标准</li>
+                </ul>
+                <p class="nested-proj-label">项目成果</p>
+                <p class="nested-proj-result">
+                  撰写线每条回复需查阅知识库后撰写，完成后还须经交叉审核，耗时远超评分任务，是项目的主要交付风险点。为此单独为撰写线制定排班计划，优先安排理解能力强的成员承接，并设立每日产量预警机制，及早识别滞后风险。最终两条交付线均按期完成，全部验收通过。
+                </p>
+              </div>
+
+              <!-- 项目三 -->
+              <div class="nested-proj">
+                <div class="nested-proj-title">
+                  家居场景多模态 AI 训练数据标注项目
+                  <span class="tag">多模态</span>
+                </div>
+                <p class="nested-proj-label">项目背景</p>
+                <p class="proj-desc" style="font-size:0.83rem; color:var(--dim); line-height:1.8; margin:0;">
+                  项目针对家居场景的图像与视频进行多模态标注，涉及家具识别、空间布局、风格与材质属性等，对室内设计领域知识有一定门槛，而团队多数成员缺乏相关背景。
+                </p>
+                <p class="nested-proj-label">主要职责</p>
+                <ul class="tl-list">
+                  <li>承接家居多模态标注业务的日常执行，将甲方需求拆解为可落地的标注规范与操作指南</li>
+                  <li>发挥室内设计专业背景，针对团队普遍缺乏装修与设计知识的情况，开展家具品类、空间关系、风格与材质判定等专项培训，帮助成员准确理解标注对象</li>
+                  <li>执行多模态数据质检，跟进打标进度，及时发现并纠正影响交付质量的问题</li>
+                </ul>
+                <p class="nested-proj-label">项目成果</p>
+                <p class="nested-proj-result">
+                  针对团队缺乏设计知识、易在风格与材质等模糊场景上犹豫的交付瓶颈，结合专业背景整理"速判指南"并开展专项培训，标注速度与准确率明显提升，交付量逐周达标并保持稳定，相关材料沉淀为项目 SOP。
+                </p>
+              </div>
+
+            </div><!-- /.nested-projs -->
           </div>
 
+          <!-- 湘知合装饰 -->
           <div class="timeline-item si" style="transition-delay:80ms">
             <div class="tl-header">
               <div class="tl-left">
                 <span class="tl-company">湖南湘知合装饰有限公司</span>
                 <span class="tag">深化设计师</span>
               </div>
-              <span class="tl-date">2023.04 — 2025.03</span>
+              <span class="tl-date">2023.04 — 2024.11</span>
             </div>
             <ul class="tl-list">
-              <li>深入分析客户需求，提供专业设计咨询与解决方案，独立完成施工图、效果图及节点图深化</li>
-              <li>全流程协调客户、项目经理与施工团队，确保设计成果准确落地</li>
-              <li>培养了极强的需求理解能力与多方沟通协调能力，为后续 AI 业务理解能力奠定基础</li>
+              <li>负责装饰工程施工图深化设计，对接设计、施工与甲方多方，协调推进现场节点与工艺问题处理，把控图纸按节点落地交付</li>
             </ul>
           </div>
 
-        </div>
-      </section>
-
-      <!-- ══════════════════════════════
-           实习经历
-      ══════════════════════════════ -->
-      <section class="section reveal" style="transition-delay:.14s">
-        <h2 class="sec-heading">实习经历</h2>
-        <div class="timeline">
-
-          <div class="timeline-item si" style="transition-delay:0ms">
+          <!-- 邦普循环 -->
+          <div class="timeline-item si" style="transition-delay:160ms">
             <div class="tl-header">
               <div class="tl-left">
                 <span class="tl-company">湖南邦普循环科技有限公司</span>
                 <span class="tag">生产工艺实习生</span>
               </div>
-              <span class="tl-date">2022.09 — 2023.01</span>
+              <span class="tl-date">2022.11 — 2023.01</span>
             </div>
             <ul class="tl-list">
-              <li>负责生产工段设备巡检与日常维护，保障产线稳定运行</li>
-              <li>协助主管完成工艺文件编制、更新及变更申请，培养了严谨的文档规范意识</li>
-              <li>跨部门跟踪生产全过程，确保各环节严格按照标准执行</li>
+              <li>参与生产工艺流程的跟线与数据记录，协助整理现场问题并配合工艺改进</li>
             </ul>
           </div>
 
@@ -388,40 +439,71 @@
       </section>
 
       <!-- ══════════════════════════════
-           教育信息
+           个人优势
       ══════════════════════════════ -->
-      <section class="section reveal" style="transition-delay:.18s">
-        <h2 class="sec-heading">教育信息</h2>
-        <div class="edu-card si">
-          <div class="edu-header">
-            <div class="edu-left">
-              <span class="edu-school">湖南有色金属职业技术学院</span>
-              <span class="tag">储能材料技术</span>
-              <span class="tag">大专</span>
-            </div>
-            <span class="tl-date">2019.09 — 2022.06</span>
-          </div>
-          <p class="edu-desc">
-            在校期间加入学院团总支组织部，参与活动策划、组织协调及会议安排，具备良好的团队协作与沟通能力；系统学习材料科学与生产工艺课程，培养了严谨的逻辑思维与数据分析意识。
+      <section class="section reveal" style="transition-delay:.14s">
+        <h2 class="sec-heading">个人优势</h2>
+        <div class="summary-card si">
+          <p class="summary-text">
+            具备数据标注全流程管理经验，覆盖需求拆解、规范制定、团队管理、质检把控到交付验收的完整链路，熟悉短视频内容理解、大模型对话评分与撰写、多模态图像 / 视频等多类标注任务；擅长通过评分细则、标准样例、一致性校准与分歧复盘等手段统一标注口径、降低主观偏差，在效率与质量之间灵活平衡；并能在需求临时变更、交付不及预期等压力场景下快速定位根因、落地方案，稳住交付节奏，同时习惯把一次性问题的解法沉淀为可复用的规范与 SOP，持续提升团队整体效率。
           </p>
         </div>
       </section>
 
       <!-- ══════════════════════════════
-           个人总结
+           专业技能
       ══════════════════════════════ -->
-      <section class="section reveal" style="transition-delay:.22s">
-        <h2 class="sec-heading">个人总结</h2>
-        <div class="summary-card si">
-          <p class="summary-text">
-            具备完整的大模型训练数据项目实战经验，熟悉 SFT、RAG 等核心训练环节，能快速理解业务目标并将其转化为高质量训练数据方案。拥有扎实的数据治理能力，可独立完成规则制定、数据构建、质量审核及 BadCase 闭环迭代。业务理解能力强，擅长复杂场景的结构化拆解，在智能客服、知识问答、Agent 等项目中均有落地实践。兼具优秀的跨部门协调能力，对 AI 训练与数据治理方向保持持续学习热情，致力于成长为兼具技术深度与项目管理能力的高级 AI 训练师。
-          </p>
+      <section class="section reveal" style="transition-delay:.18s">
+        <h2 class="sec-heading">专业技能</h2>
+        <div class="skills-grid si">
+
+          <div class="skill-row">
+            <span class="skill-label">数据标注</span>
+            <div class="skill-tags">
+              <span class="skill-tag">内容分类 / 标签标注</span>
+              <span class="skill-tag">大模型对话质量评分</span>
+              <span class="skill-tag">偏好标注</span>
+              <span class="skill-tag">优质回复撰写</span>
+              <span class="skill-tag">多模态（图像 / 视频）标注</span>
+            </div>
+          </div>
+
+          <div class="skill-row">
+            <span class="skill-label">质量管理</span>
+            <div class="skill-tags">
+              <span class="skill-tag">标注规范与评分细则制定</span>
+              <span class="skill-tag">一致性校准</span>
+              <span class="skill-tag">抽检策略设计</span>
+              <span class="skill-tag">质检流程搭建</span>
+            </div>
+          </div>
+
+          <div class="skill-row">
+            <span class="skill-label">项目管理</span>
+            <div class="skill-tags">
+              <span class="skill-tag">进度把控</span>
+              <span class="skill-tag">团队管理与排班</span>
+              <span class="skill-tag">资源协调</span>
+              <span class="skill-tag">风险识别</span>
+              <span class="skill-tag">客户对接</span>
+            </div>
+          </div>
+
+          <div class="skill-row">
+            <span class="skill-label">文档能力</span>
+            <div class="skill-tags">
+              <span class="skill-tag">标注规范</span>
+              <span class="skill-tag">操作指南</span>
+              <span class="skill-tag">SOP 文档编写</span>
+            </div>
+          </div>
+
         </div>
       </section>
 
       <!-- ── 返回主页 ── -->
-      <div class="back-to-home reveal" style="transition-delay:.26s">
-        <a class="back-home-btn" href="/">
+      <div class="back-to-home reveal" style="transition-delay:.22s">
+        <a class="back-home-btn" href="/starry-personal-website/">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
@@ -435,7 +517,7 @@
       <div class="footer-inner">
         <div>
           <p class="ft-brand">STARRY</p>
-          <p class="ft-sub">AI Trainer · Personal Website</p>
+          <p class="ft-sub">Project Manager · Personal Website</p>
         </div>
         <p class="ft-copy">© 2026 Starry · All rights reserved.</p>
       </div>
