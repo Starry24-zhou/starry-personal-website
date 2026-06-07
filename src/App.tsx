@@ -81,20 +81,6 @@ const socialLinks = [
     description: '短视频 / 创作内容',
   },
   {
-    name: '小红书',
-    label: 'Xiaohongshu',
-    href: 'https://www.xiaohongshu.com/user/profile/62cbce4c0000000002000063',
-    iconColor: '#FF2442',
-    icon: (
-      <img
-        className="h-8 w-8 rounded-full object-cover"
-        src="https://www.xiaohongshu.com/favicon.ico"
-        alt="小红书"
-      />
-    ),
-    description: '图文笔记 / 生活分享',
-  },
-  {
     name: '哔哩哔哩',
     label: 'Bilibili',
     href: 'https://space.bilibili.com/262446332?spm_id_from=333.1007.0.0',
@@ -105,6 +91,18 @@ const socialLinks = [
       </svg>
     ),
     description: '视频内容 / UP 主主页',
+  },
+  {
+    name: '邮箱',
+    label: 'Email',
+    href: 'mailto:hi@pengjianai.com',
+    iconColor: '#dfff00',
+    icon: (
+      <svg className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+      </svg>
+    ),
+    description: 'hi@pengjianai.com',
   },
 ];
 
@@ -461,7 +459,7 @@ export default function App() {
                   </div>
                   <p className="text-xs leading-relaxed text-gray-400">{link.description}</p>
                   <span className="mt-auto inline-flex items-center gap-1.5 text-xs text-[#E1E0CC]/60 transition-all duration-200 hover:text-[#E1E0CC]/90">
-                    {link.href.startsWith('#') ? '扫码联系' : `前往 ${link.name}`}
+                    {link.href.startsWith('#') ? '扫码联系' : link.href.startsWith('mailto:') ? '发送邮件' : `前往 ${link.name}`}
                     <ArrowRight className="h-3 w-3 -rotate-45" />
                   </span>
                 </a>
