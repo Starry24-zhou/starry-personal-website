@@ -150,6 +150,8 @@ function TextCard({
     v.setAttribute('x5-video-player-type', 'h5');
     v.setAttribute('x5-video-player-fullscreen', 'false');
     v.setAttribute('x5-playsinline', 'true');
+    v.setAttribute('x-webkit-airplay', 'deny');
+    v.setAttribute('disableRemotePlayback', '');
     const tryPlay = () => { v.play().catch(() => {}); };
     v.addEventListener('canplay', tryPlay, { once: true });
     v.load();
@@ -187,14 +189,18 @@ function TextCard({
         <video
           ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover"
+          style={{ pointerEvents: 'none' }}
           autoPlay
           loop
           muted
           playsInline
+          disableRemotePlayback
           preload="auto"
           src={videoSrc}
         />
       )}
+      {/* Transparent overlay: blocks mobile browsers from hijacking video touch events */}
+      {videoSrc && <div className="absolute inset-0 z-10" style={{ pointerEvents: 'auto', background: 'transparent' }} />}
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-80" />
       <div className="absolute bottom-6 left-6 right-6">
         <p className="text-xs uppercase tracking-[0.22em] text-primary/70">{title}</p>
