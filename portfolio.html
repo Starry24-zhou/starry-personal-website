@@ -436,7 +436,7 @@
           name: '秋芝2046',
           initial: '秋',
           color: '#c8a84b',
-          avatar: '/avatars/qiuzhi2046.jpg',
+          avatar: 'avatars/qiuzhi2046.jpg',
           platforms: ['抖音', 'B站'],
           desc: '前互联网产品经理，全网 245 万粉丝。擅长横向对比测评，帮你快速找到真正值得用的 AI 工具，风格亲切实用。',
           url: 'https://www.douyin.com/search/秋芝2046',
@@ -446,7 +446,7 @@
           name: 'K森动画',
           initial: 'K',
           color: '#6ab04c',
-          avatar: '/avatars/ksendonghua.jpg',
+          avatar: 'avatars/ksendonghua.jpg',
           platforms: ['抖音', 'B站'],
           desc: '专注 AI 动画创作，深入探索 AI 在影视动画领域的应用，兼顾创意灵感与实操流程，适合对 AIGC 创作感兴趣的你。',
           url: 'https://space.bilibili.com/282497876/',
@@ -456,7 +456,7 @@
           name: '数字游牧人Samuel',
           initial: 'S',
           color: '#4a90d9',
-          avatar: '/avatars/samuel.jpg',
+          avatar: 'avatars/samuel.jpg',
           platforms: ['抖音', 'B站'],
           desc: 'AI + 数字游民生活方式博主，前微软工程师。分享远程工作工具、效率方法与副业变现实践，适合想用 AI 重构工作方式的人。',
           url: 'https://space.bilibili.com/4848323/',
@@ -466,7 +466,7 @@
           name: 'Xuan酱',
           initial: 'X',
           color: '#e05c9a',
-          avatar: '/avatars/xuanjiang.jpg',
+          avatar: 'avatars/xuanjiang.jpg',
           platforms: ['抖音', 'B站'],
           desc: '全职 AI 自媒体，全网 50 万+关注。专注 AI 工具实操教程，手把手演示使用技巧，内容通俗易懂，新手友好。',
           url: 'https://space.bilibili.com/14848367/',
@@ -476,7 +476,7 @@
           name: '技术爬爬虾',
           initial: '虾',
           color: '#e07b3a',
-          avatar: '/avatars/jspaxia.jpg',
+          avatar: 'avatars/jspaxia.jpg',
           platforms: ['抖音', 'B站', 'YouTube'],
           desc: '全网同名，以工程师视角拆解 AI 工具与技术实现，内容扎实深入，兼顾环境搭建、源码分析与实战演示。',
           url: 'https://space.bilibili.com/316183842/',
@@ -486,7 +486,7 @@
           name: '林亦LYi',
           initial: '林',
           color: '#9b59b6',
-          avatar: '/avatars/linyi.jpg',
+          avatar: 'avatars/linyi.jpg',
           platforms: ['抖音', 'B站', 'YouTube'],
           desc: '全网约 300 万粉丝，B 站知识区 2023 金知奖得主。深度 AI 科普，用通俗语言解读前沿模型与行业趋势。',
           url: 'https://space.bilibili.com/4401694/',
@@ -496,7 +496,7 @@
           name: '荒蛋记录员',
           initial: '荒',
           color: '#3ab8a0',
-          avatar: '/avatars/huangdan.jpg',
+          avatar: 'avatars/huangdan.jpg',
           platforms: ['抖音', 'B站'],
           desc: '用 AIGC 记录一只猫咪的日常 vlog，风格治愈独特。是少数将 AI 创作深度融入生活叙事的内容博主，单视频播放破千万。',
           url: 'https://space.bilibili.com/3632303408417140/',
@@ -506,7 +506,7 @@
           name: '跟李沐学AI',
           initial: '李',
           color: '#e84393',
-          avatar: '/avatars/limu.jpg',
+          avatar: 'avatars/limu.jpg',
           platforms: ['B站', 'YouTube'],
           desc: 'B 站 112 万粉丝，前亚马逊首席科学家。以严谨的学术背景讲解深度学习与大模型原理，内容硬核，开发者必关注。',
           url: 'https://space.bilibili.com/1567748478/',
@@ -626,14 +626,14 @@
       }
       function iconHtml(fav, name) {
         if (LOCAL_FAVICONS.has(fav)) {
-          const src = '/favicons/' + fav + '.png';
+          const src = 'favicons/' + fav + '.png';
           return `<img src="${src}" alt="${name}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="tool-icon-fb">${_svgIcon(fav, name)}</div>`;
         }
         return _svgIcon(fav, name);
       }
       function rankIconHtml(fav, name) {
         if (LOCAL_FAVICONS.has(fav)) {
-          const src = '/favicons/' + fav + '.png';
+          const src = 'favicons/' + fav + '.png';
           return `<img src="${src}" alt="${name}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="rank-logo-fb">${_svgIcon(fav, name)}</div>`;
         }
         return _svgIcon(fav, name);
