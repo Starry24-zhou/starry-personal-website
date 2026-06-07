@@ -253,7 +253,7 @@ export default function App() {
   const { scrollYProgress } = useScroll({ target: aboutRef, offset: ['start 0.8', 'end 0.2'] });
   const aboutText = useMemo(
     () =>
-      '我是一名 AI 训练师，专注于大模型微调、SFT 数据构建与 RAG 知识库落地。这里汇聚了我的完整简历、精选全球 AI 工具与产品榜，以及 F1 2026 赛季实时积分数据，是我持续沉淀内容与记录热爱的个人空间。'.split(
+      '我是一名数据标注项目经理，专注于标注全流程管理与交付质量把控，有短视频分类、大模型对话优化、多模态标注等项目落地经验。这里汇聚了我的完整简历、精选全球 AI 工具与产品榜，以及 F1 2026 赛季实时积分数据，是我持续沉淀内容与记录热爱的个人空间。'.split(
         '',
       ),
     [],
