@@ -147,6 +147,9 @@ function TextCard({
     v.muted = true;
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
+    v.setAttribute('x5-video-player-type', 'h5');
+    v.setAttribute('x5-video-player-fullscreen', 'false');
+    v.setAttribute('x5-playsinline', 'true');
     const tryPlay = () => { v.play().catch(() => {}); };
     v.addEventListener('canplay', tryPlay, { once: true });
     v.load();
@@ -216,6 +219,9 @@ export default function App() {
       v.muted = true;
       v.setAttribute('playsinline', '');
       v.setAttribute('webkit-playsinline', '');
+      v.setAttribute('x5-video-player-type', 'h5');
+      v.setAttribute('x5-video-player-fullscreen', 'false');
+      v.setAttribute('x5-playsinline', 'true');
       const tryPlay = () => { v.play().catch(() => {}); };
       v.addEventListener('canplay', tryPlay, { once: true });
       v.load();
