@@ -131,83 +131,27 @@ function FeatureCard({
   );
 }
 
-function VideoCanvas({ src }: { src: string }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>(0);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    const c = canvasRef.current;
-    if (!v || !c) return;
-    const ctx = c.getContext('2d');
-    if (!ctx) return;
-
-    let running = true;
-
-    const draw = () => {
-      if (!running) return;
-      if (v.readyState >= 2 && v.videoWidth > 0) {
-        const p = c.parentElement;
-        const cw = p ? p.clientWidth : 0;
-        const ch = p ? p.clientHeight : 0;
-        if (cw > 0 && ch > 0) {
-          if (c.width !== cw) c.width = cw;
-          if (c.height !== ch) c.height = ch;
-          const vr = v.videoWidth / v.videoHeight;
-          const cr = cw / ch;
-          let sx = 0, sy = 0, sw = v.videoWidth, sh = v.videoHeight;
-          if (vr > cr) { sw = sh * cr; sx = (v.videoWidth - sw) / 2; }
-          else { sh = sw / cr; sy = (v.videoHeight - sh) / 2; }
-          try { ctx.drawImage(v, sx, sy, sw, sh, 0, 0, cw, ch); } catch (_) {}
-        }
-      }
-      rafRef.current = requestAnimationFrame(draw);
-    };
-
-    // Start RAF immediately — draws as soon as video has frames
-    rafRef.current = requestAnimationFrame(draw);
-
-    v.muted = true;
-    v.setAttribute('playsinline', '');
-    v.setAttribute('webkit-playsinline', '');
-
-    const tryPlay = () => v.play().catch(() => {});
-    v.addEventListener('canplay', tryPlay, { once: true });
-    tryPlay();
-
-    const onTouch = () => tryPlay();
-    const onClick = () => tryPlay();
-    window.addEventListener('touchstart', onTouch, { once: true, passive: true });
-    window.addEventListener('click', onClick, { once: true, passive: true });
-
-    return () => {
-      running = false;
-      cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('touchstart', onTouch);
-      window.removeEventListener('click', onClick);
-    };
-  }, [src]);
-
-  return (
-    <>
-      {/* 1×1px opacity:1 — browser MUST decode frames; too small for MIUI player detection */}
-      <video
-        ref={videoRef}
-        src={src}
-        muted
-        loop
-        playsInline
-        autoPlay
-        style={{ position: 'absolute', width: '1px', height: '1px', opacity: 1, pointerEvents: 'none', top: '50%', left: '50%' }}
-      />
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0"
-        style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
-      />
-    </>
+function setupBgVideo(v: HTMLVideoElement, card: HTMLElement) {
+  v.muted = true;
+  v.setAttribute('playsinline', '');
+  v.setAttribute('webkit-playsinline', '');
+  v.setAttribute('x5-video-player-type', 'h5');
+  v.setAttribute('x5-video-player-fullscreen', 'false');
+  v.setAttribute('x5-playsinline', 'true');
+  v.setAttribute('x-webkit-airplay', 'deny');
+  v.setAttribute('disableRemotePlayback', '');
+  v.setAttribute('disablepictureinpicture', '');
+  const tryPlay = () => { v.play().catch(() => {}); };
+  v.addEventListener('canplay', tryPlay, { once: true });
+  v.load();
+  tryPlay();
+  // Pause when card scrolls out of view — prevents MIUI floating player
+  const obs = new IntersectionObserver(
+    (entries) => { entries[0].isIntersecting ? tryPlay() : v.pause(); },
+    { threshold: 0.1 }
   );
+  obs.observe(card);
+  return obs;
 }
 
 function TextCard({
@@ -218,6 +162,21 @@ function TextCard({
   href,
   videoSrc,
 }: (typeof features)[number] & { videoSrc?: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const card = v.parentElement!;
+    const obs = setupBgVideo(v, card);
+    const events = ['touchstart', 'touchend', 'click'] as const;
+    const tryPlay = () => { v.play().catch(() => {}); };
+    events.forEach(e => window.addEventListener(e, tryPlay, { once: true, passive: true }));
+    return () => {
+      obs.disconnect();
+      events.forEach(e => window.removeEventListener(e, tryPlay));
+    };
+  }, []);
 
   const scrollToTarget = () => {
     if (!href.startsWith('#')) return;
@@ -242,7 +201,16 @@ function TextCard({
       onClick={handleCardClick}
       className="group relative flex h-full min-h-[320px] cursor-pointer overflow-hidden rounded-[1.75rem] bg-[#212121] no-underline"
     >
-      {videoSrc && <VideoCanvas src={videoSrc} />}
+      {videoSrc && (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ pointerEvents: 'none' }}
+          autoPlay loop muted playsInline disableRemotePlayback preload="auto"
+          src={videoSrc}
+        />
+      )}
+      {videoSrc && <div className="absolute inset-0 z-10" style={{ pointerEvents: 'auto', background: 'transparent' }} />}
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-80" />
       <div className="absolute bottom-6 left-6 right-6">
         <p className="text-xs uppercase tracking-[0.22em] text-primary/70">{title}</p>
@@ -260,24 +228,15 @@ export default function App() {
   const [wechatOpen, setWechatOpen] = useState(false);
   const aboutRef = useRef<HTMLElement | null>(null);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const featureVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const loadAndPlay = (v: HTMLVideoElement) => {
-      v.muted = true;
-      v.setAttribute('playsinline', '');
-      v.setAttribute('webkit-playsinline', '');
-      v.setAttribute('x5-video-player-type', 'h5');
-      v.setAttribute('x5-video-player-fullscreen', 'false');
-      v.setAttribute('x5-playsinline', 'true');
-      const tryPlay = () => { v.play().catch(() => {}); };
-      v.addEventListener('canplay', tryPlay, { once: true });
-      v.load();
-      tryPlay();
-    };
-
-    // Hero video: load immediately (above the fold)
     const hv = heroVideoRef.current;
-    if (hv) loadAndPlay(hv);
+    if (hv) setupBgVideo(hv, hv.parentElement!);
+
+    const fv = featureVideoRef.current;
+    let featureObs: IntersectionObserver | null = null;
+    if (fv && fv.parentElement) featureObs = setupBgVideo(fv, fv.parentElement);
 
     const onInteraction = () => {
       document.querySelectorAll('video').forEach(v => (v as HTMLVideoElement).play().catch(() => {}));
@@ -286,6 +245,7 @@ export default function App() {
       window.addEventListener(e, onInteraction, { once: true, passive: true })
     );
     return () => {
+      featureObs?.disconnect();
       ['touchstart', 'touchend', 'click', 'scroll'].forEach(e =>
         window.removeEventListener(e, onInteraction)
       );
@@ -429,7 +389,14 @@ export default function App() {
                 id="portfolio-overview"
                 className="group relative flex h-full min-h-[320px] overflow-hidden rounded-[1.75rem] bg-[#212121] no-underline"
               >
-                <VideoCanvas src={featureVideo} />
+                <video
+                  ref={featureVideoRef}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ pointerEvents: 'none' }}
+                  autoPlay loop muted playsInline disableRemotePlayback preload="none"
+                  src={featureVideo}
+                />
+                <div className="absolute inset-0 z-10" style={{ pointerEvents: 'auto', background: 'transparent' }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-80" />
                 <div className="absolute bottom-6 left-6 right-6">
                   <p className="text-xs uppercase tracking-[0.22em] text-primary/70">AI推荐</p>
