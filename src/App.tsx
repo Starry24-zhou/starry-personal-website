@@ -169,11 +169,8 @@ function VideoCanvas({ src }: { src: string }) {
     rafRef.current = requestAnimationFrame(draw);
 
     v.muted = true;
-    v.loop = true;
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
-    v.src = src;
-    v.load();
 
     const tryPlay = () => v.play().catch(() => {});
     v.addEventListener('canplay', tryPlay, { once: true });
@@ -194,13 +191,15 @@ function VideoCanvas({ src }: { src: string }) {
 
   return (
     <>
-      {/* opacity:0.01 not 0 — forces mobile browser to decode frames (0 triggers battery opt skip) */}
+      {/* 1×1px opacity:1 — browser MUST decode frames; too small for MIUI player detection */}
       <video
         ref={videoRef}
+        src={src}
         muted
         loop
         playsInline
-        style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0.01, pointerEvents: 'none', top: '50%', left: '50%' }}
+        autoPlay
+        style={{ position: 'absolute', width: '1px', height: '1px', opacity: 1, pointerEvents: 'none', top: '50%', left: '50%' }}
       />
       <canvas
         ref={canvasRef}
