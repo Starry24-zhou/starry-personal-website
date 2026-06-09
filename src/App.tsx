@@ -131,90 +131,6 @@ function FeatureCard({
   );
 }
 
-function VideoCanvas({ src }: { src: string }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>(0);
-  const animatingRef = useRef(false);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    const c = canvasRef.current;
-    if (!v || !c) return;
-    const ctx = c.getContext('2d');
-    if (!ctx) return;
-
-    const drawFrame = () => {
-      if (!animatingRef.current) return;
-      if (v.readyState >= 2 && v.videoWidth > 0) {
-        const parent = c.parentElement;
-        const cw = parent ? parent.clientWidth : 300;
-        const ch = parent ? parent.clientHeight : 300;
-        if (c.width !== cw) c.width = cw;
-        if (c.height !== ch) c.height = ch;
-        const vr = v.videoWidth / v.videoHeight;
-        const cr = cw / ch;
-        let sx = 0, sy = 0, sw = v.videoWidth, sh = v.videoHeight;
-        if (vr > cr) { sw = sh * cr; sx = (v.videoWidth - sw) / 2; }
-        else { sh = sw / cr; sy = (v.videoHeight - sh) / 2; }
-        try { ctx.drawImage(v, sx, sy, sw, sh, 0, 0, cw, ch); } catch (_) {}
-      }
-      rafRef.current = requestAnimationFrame(drawFrame);
-    };
-
-    const startPlay = () => {
-      v.play().catch(() => {});
-      if (!animatingRef.current) {
-        animatingRef.current = true;
-        rafRef.current = requestAnimationFrame(drawFrame);
-      }
-    };
-
-    v.muted = true;
-    v.loop = true;
-    v.setAttribute('playsinline', '');
-    v.setAttribute('webkit-playsinline', '');
-    v.addEventListener('canplay', startPlay, { once: true });
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) { v.src = src; v.load(); obs.disconnect(); }
-      },
-      { rootMargin: '200px' }
-    );
-    obs.observe(c);
-
-    const onInteraction = () => { v.play().catch(() => {}); };
-    ['touchstart', 'click'].forEach(e =>
-      window.addEventListener(e, onInteraction, { once: true, passive: true })
-    );
-
-    return () => {
-      animatingRef.current = false;
-      cancelAnimationFrame(rafRef.current);
-      obs.disconnect();
-      ['touchstart', 'click'].forEach(e => window.removeEventListener(e, onInteraction));
-    };
-  }, [src]);
-
-  return (
-    <>
-      <video
-        ref={videoRef}
-        muted
-        loop
-        playsInline
-        style={{ position: 'absolute', width: '1px', height: '1px', top: '-9999px', left: '-9999px', opacity: 0, pointerEvents: 'none' }}
-      />
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0"
-        style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
-      />
-    </>
-  );
-}
-
 function TextCard({
   title,
   desc,
@@ -223,11 +139,32 @@ function TextCard({
   href,
   videoSrc,
 }: (typeof features)[number] & { videoSrc?: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
+    v.setAttribute('x5-video-player-type', 'h5');
+    v.setAttribute('x5-video-player-fullscreen', 'false');
+    v.setAttribute('x5-playsinline', 'true');
+    v.setAttribute('x-webkit-airplay', 'deny');
+    v.setAttribute('disableRemotePlayback', '');
+    const tryPlay = () => { v.play().catch(() => {}); };
+    v.addEventListener('canplay', tryPlay, { once: true });
+    v.load();
+    tryPlay();
+    const events = ['touchstart', 'touchend', 'click'] as const;
+    events.forEach(e => window.addEventListener(e, tryPlay, { once: true, passive: true }));
+    return () => events.forEach(e => window.removeEventListener(e, tryPlay));
+  }, []);
+
   const scrollToTarget = () => {
     if (!href.startsWith('#')) return;
     const target = document.querySelector(href);
     if (!target) return;
-
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (window.location.hash !== href) {
       window.history.replaceState(null, '', href);
@@ -247,7 +184,21 @@ function TextCard({
       onClick={handleCardClick}
       className="group relative flex h-full min-h-[320px] cursor-pointer overflow-hidden rounded-[1.75rem] bg-[#212121] no-underline"
     >
-      {videoSrc && <VideoCanvas src={videoSrc} />}
+      {videoSrc && (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ pointerEvents: 'none' }}
+          autoPlay
+          loop
+          muted
+          playsInline
+          disableRemotePlayback
+          preload="auto"
+          src={videoSrc}
+        />
+      )}
+      {videoSrc && <div className="absolute inset-0 z-10" style={{ pointerEvents: 'auto', background: 'transparent' }} />}
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-80" />
       <div className="absolute bottom-6 left-6 right-6">
         <p className="text-xs uppercase tracking-[0.22em] text-primary/70">{title}</p>
@@ -265,6 +216,7 @@ export default function App() {
   const [wechatOpen, setWechatOpen] = useState(false);
   const aboutRef = useRef<HTMLElement | null>(null);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const featureVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const loadAndPlay = (v: HTMLVideoElement) => {
@@ -283,6 +235,15 @@ export default function App() {
     // Hero video: load immediately (above the fold)
     const hv = heroVideoRef.current;
     if (hv) loadAndPlay(hv);
+
+    // Feature video: lazy-load when card scrolls into view
+    const fv = featureVideoRef.current;
+    if (fv) {
+      const obs = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) { loadAndPlay(fv); obs.disconnect(); }
+      }, { rootMargin: '300px' });
+      obs.observe(fv);
+    }
 
     const onInteraction = () => {
       document.querySelectorAll('video').forEach(v => (v as HTMLVideoElement).play().catch(() => {}));
@@ -434,7 +395,18 @@ export default function App() {
                 id="portfolio-overview"
                 className="group relative flex h-full min-h-[320px] overflow-hidden rounded-[1.75rem] bg-[#212121] no-underline"
               >
-                <VideoCanvas src={featureVideo} />
+                <video
+                  className="absolute inset-0 h-full w-full object-cover"
+                  ref={featureVideoRef}
+                  style={{ pointerEvents: 'none' }}
+                  loop
+                  muted
+                  playsInline
+                  disableRemotePlayback
+                  preload="none"
+                  src={featureVideo}
+                />
+                <div className="absolute inset-0 z-10" style={{ pointerEvents: 'auto', background: 'transparent' }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-80" />
                 <div className="absolute bottom-6 left-6 right-6">
                   <p className="text-xs uppercase tracking-[0.22em] text-primary/70">AI推荐</p>
