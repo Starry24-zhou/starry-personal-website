@@ -135,7 +135,6 @@ function VideoCanvas({ src }: { src: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
-  const animatingRef = useRef(false);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -144,67 +143,64 @@ function VideoCanvas({ src }: { src: string }) {
     const ctx = c.getContext('2d');
     if (!ctx) return;
 
-    const drawFrame = () => {
-      if (!animatingRef.current) return;
+    let running = true;
+
+    const draw = () => {
+      if (!running) return;
       if (v.readyState >= 2 && v.videoWidth > 0) {
-        const parent = c.parentElement;
-        const cw = parent ? parent.clientWidth : 300;
-        const ch = parent ? parent.clientHeight : 300;
-        if (c.width !== cw) c.width = cw;
-        if (c.height !== ch) c.height = ch;
-        const vr = v.videoWidth / v.videoHeight;
-        const cr = cw / ch;
-        let sx = 0, sy = 0, sw = v.videoWidth, sh = v.videoHeight;
-        if (vr > cr) { sw = sh * cr; sx = (v.videoWidth - sw) / 2; }
-        else { sh = sw / cr; sy = (v.videoHeight - sh) / 2; }
-        try { ctx.drawImage(v, sx, sy, sw, sh, 0, 0, cw, ch); } catch (_) {}
+        const p = c.parentElement;
+        const cw = p ? p.clientWidth : 0;
+        const ch = p ? p.clientHeight : 0;
+        if (cw > 0 && ch > 0) {
+          if (c.width !== cw) c.width = cw;
+          if (c.height !== ch) c.height = ch;
+          const vr = v.videoWidth / v.videoHeight;
+          const cr = cw / ch;
+          let sx = 0, sy = 0, sw = v.videoWidth, sh = v.videoHeight;
+          if (vr > cr) { sw = sh * cr; sx = (v.videoWidth - sw) / 2; }
+          else { sh = sw / cr; sy = (v.videoHeight - sh) / 2; }
+          try { ctx.drawImage(v, sx, sy, sw, sh, 0, 0, cw, ch); } catch (_) {}
+        }
       }
-      rafRef.current = requestAnimationFrame(drawFrame);
+      rafRef.current = requestAnimationFrame(draw);
     };
 
-    const startPlay = () => {
-      v.play().catch(() => {});
-      if (!animatingRef.current) {
-        animatingRef.current = true;
-        rafRef.current = requestAnimationFrame(drawFrame);
-      }
-    };
+    // Start RAF immediately — draws as soon as video has frames
+    rafRef.current = requestAnimationFrame(draw);
 
     v.muted = true;
     v.loop = true;
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
-    v.addEventListener('canplay', startPlay, { once: true });
+    v.src = src;
+    v.load();
 
-    const obs = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) { v.src = src; v.load(); obs.disconnect(); }
-      },
-      { rootMargin: '200px' }
-    );
-    obs.observe(c);
+    const tryPlay = () => v.play().catch(() => {});
+    v.addEventListener('canplay', tryPlay, { once: true });
+    tryPlay();
 
-    const onInteraction = () => { v.play().catch(() => {}); };
-    ['touchstart', 'click'].forEach(e =>
-      window.addEventListener(e, onInteraction, { once: true, passive: true })
-    );
+    const onTouch = () => tryPlay();
+    const onClick = () => tryPlay();
+    window.addEventListener('touchstart', onTouch, { once: true, passive: true });
+    window.addEventListener('click', onClick, { once: true, passive: true });
+
     return () => {
-      animatingRef.current = false;
+      running = false;
       cancelAnimationFrame(rafRef.current);
-      obs.disconnect();
-      ['touchstart', 'click'].forEach(e => window.removeEventListener(e, onInteraction));
+      window.removeEventListener('touchstart', onTouch);
+      window.removeEventListener('click', onClick);
     };
   }, [src]);
 
   return (
     <>
-      {/* 1×1px in-viewport: autoplay allowed; too small for browser to show player UI */}
+      {/* opacity:0.01 not 0 — forces mobile browser to decode frames (0 triggers battery opt skip) */}
       <video
         ref={videoRef}
         muted
         loop
         playsInline
-        style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0, pointerEvents: 'none', top: '50%', left: '50%' }}
+        style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0.01, pointerEvents: 'none', top: '50%', left: '50%' }}
       />
       <canvas
         ref={canvasRef}
